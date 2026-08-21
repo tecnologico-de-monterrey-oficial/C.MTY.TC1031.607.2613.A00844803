@@ -1,4 +1,4 @@
-<!-- Reflexion
+Reflexion
 
 1. ¿En que casos notaste que la version recursiva fue mas lenta o uso mas memoria que la iterativa? ¿A que se debio?
 
@@ -12,4 +12,4 @@ Me dice que antes de programar un problema es importante analizarlo y buscar si 
 
 3. Si bacteriasRecursive tuviera que calcular n = 100,000 dias, ¿que problema esperarias encontrar y como lo resolverias?
 
-Esperaria que el programa tuviera problemas por la gran cantidad de llamadas recursivas y podria provocar un desbordamiento de la pila de memoria. Lo resolveria utilizando la version iterativa, ya que utiliza un ciclo y no necesita realizar miles de llamadas recursivas. -->
+Esperaria que el programa tuviera problemas por la gran cantidad de llamadas recursivas y podria provocar un desbordamiento de la pila de memoria. Lo resolveria utilizando la version iterativa, ya que utiliza un ciclo y no necesita realizar miles de llamadas recursivas.
