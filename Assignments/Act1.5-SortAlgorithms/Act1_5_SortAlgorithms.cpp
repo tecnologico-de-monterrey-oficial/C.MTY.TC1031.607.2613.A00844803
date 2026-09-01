@@ -3,29 +3,29 @@
 #include <iostream>
 using namespace std;
 
-// void insertionSort(int arr[], int size) {
+// void insertionSort(int list[], int size) {
 
 // }
 
-void selectionSort(int arr[], int size) {
+void selectionSort(int list[], int size) {
     for (int i = 0; i < size - 1; i++) {
         int min = i;
 
         for (int j = i + 1; j < size; j++) {
-            if (arr[j] < arr[min]) {
+            if (list[j] < list[min]) {
                 min = j;
             }
         }
 
-        int temp = arr[i];
-        arr[i] = arr[min];
-        arr[min] = temp;
+        int temp = list[i];
+        list[i] = list[min];
+        list[min] = temp;
     }
 }
 
-void printList(const int arr[], int size) {
+void printList(const int list[], int size) {
     for (int i = 0; i < size; i++) {
-        cout << arr[i] << " ";
+        cout << list[i] << " ";
     }
     cout << endl;
 }
@@ -51,7 +51,7 @@ int main() {
 
     selectionSort(data, size);
 
-    cout << "Lista de numeros desordenada: ";
+    cout << "Lista de numeros ordenada con selection Sort: ";
     printList(data, size);
 
     return 0;
