@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-struct log {
+struct Log {
     int year;
     string month;
     int day;
@@ -12,15 +12,15 @@ struct log {
     string ip;
     string message;
     string key;
-    log();
-    log(int year, string month, int day, string time, string ip, string message);
+    Log();
+    Log(int year, string month, int day, string time, string ip, string message);
     string createKey();
-    bool operator>(const log& other) const;
-    bool operator<(const log& other) const;
-    bool operator==(const log& other) const;
-    bool operator!=(const log& other) const;
-    bool operator>=(const log& other) const;
-    bool operator<=(const log& other) const;
+    bool operator>(const Log& other) const;
+    bool operator<(const Log& other) const;
+    bool operator==(const Log& other) const;
+    bool operator!=(const Log& other) const;
+    bool operator>=(const Log& other) const;
+    bool operator<=(const Log& other) const;
 };
 
 #endif
