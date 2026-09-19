@@ -50,7 +50,7 @@ string obtenerNumeroMes(string month) {
 
 // Constructor vacio
 Log::Log() {
-    year = 2026;
+    year = 0;
     month = "";
     day = 0;
     time = "";
@@ -129,9 +129,9 @@ vector<Log> cargarLogs(string rutaArchivo) {
     string ip;
     string message;
     int day;
-    int year = 2026;
+    int year;
 
-    while (archivo >> month >> day >> time >> ip) {
+    while (archivo >> month >> day >> year >> time >> ip) {
         getline(archivo, message);
 
         Log nuevoLog(year, month, day, time, ip, message);
@@ -142,6 +142,7 @@ vector<Log> cargarLogs(string rutaArchivo) {
     return lista;
 }
 
+// Ordena los registros usando Bubble Sort
 void bubbleSort(vector<Log>& logs) {
     int n = logs.size();
 
@@ -156,13 +157,24 @@ void bubbleSort(vector<Log>& logs) {
     }
 }
 
+// Muestra un registro en pantalla
+void mostrarLog(Log registro) {
+    cout << registro.month << " "
+         << registro.day << " "
+         << registro.year << " "
+         << registro.time << " "
+         << registro.ip
+         << registro.message << endl;
+}
+
 int main() {
     cout << "=== Evidencia 1: Ordenamiento de Logs ===" << endl;
 
-    string archivo = "data/log607-1.txt";
+    string archivo = "log607-1.txt";
     vector<Log> logs = cargarLogs(archivo);
 
-    cout << "Registros leidos: " << logs.size() << endl;
+    cout << "Registros leidos: ";
+    cout << logs.size() << endl;
 
     if (logs.size() > 0) {
         cout << "Ordenando los registros con Bubble Sort..." << endl;
@@ -172,20 +184,12 @@ int main() {
         cout << "Los registros fueron ordenados." << endl;
 
         cout << "Primer registro:" << endl;
-        cout << logs[0].month << " "
-             << logs[0].day << " "
-             << logs[0].time << " "
-             << logs[0].ip
-             << logs[0].message << endl;
+        mostrarLog(logs[0]);
 
         int ultimaPosicion = logs.size() - 1;
 
         cout << "Ultimo registro:" << endl;
-        cout << logs[ultimaPosicion].month << " "
-             << logs[ultimaPosicion].day << " "
-             << logs[ultimaPosicion].time << " "
-             << logs[ultimaPosicion].ip
-             << logs[ultimaPosicion].message << endl;
+        mostrarLog(logs[ultimaPosicion]);
     }
     else {
         cout << "No hay registros para ordenar." << endl;
