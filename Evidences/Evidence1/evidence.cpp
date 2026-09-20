@@ -6,7 +6,7 @@
 
 using namespace std;
 
-// Convierte el nombre del mes a numero
+// convierte el mes a numero
 string obtenerNumeroMes(string month) {
     if (month == "Jan") {
         return "01";
@@ -48,7 +48,7 @@ string obtenerNumeroMes(string month) {
     return "00";
 }
 
-// Constructor vacio
+// constructor vacio
 Log::Log() {
     year = 0;
     month = "";
@@ -59,7 +59,7 @@ Log::Log() {
     key = "";
 }
 
-// Constructor con datos
+// constructor con los datos del log
 Log::Log(int year, string month, int day, string time,
          string ip, string message) {
     this->year = year;
@@ -71,11 +71,12 @@ Log::Log(int year, string month, int day, string time,
     this->key = createKey();
 }
 
-// Crea una clave para comparar las fechas
+// junta la fecha y la hora en una sola clave
 string Log::createKey() {
     string numeroMes = obtenerNumeroMes(month);
     string numeroDia = to_string(day);
 
+    // agrega un cero a los dias menores a 10
     if (day < 10) {
         numeroDia = "0" + numeroDia;
     }
@@ -88,11 +89,12 @@ string Log::createKey() {
     return clave;
 }
 
-// Operadores para comparar logs
+// compara si un log es mayor que otro
 bool Log::operator>(const Log& other) const {
     return key > other.key;
 }
 
+// compara si un log es menor que otro
 bool Log::operator<(const Log& other) const {
     return key < other.key;
 }
@@ -113,11 +115,12 @@ bool Log::operator<=(const Log& other) const {
     return key <= other.key;
 }
 
-// Carga los registros desde un archivo
+// lee los registros del archivo
 vector<Log> cargarLogs(string rutaArchivo) {
     vector<Log> lista;
     ifstream archivo(rutaArchivo);
 
+    // revisa si el archivo se pudo abrir
     if (!archivo.is_open()) {
         cout << "Error al abrir el archivo: ";
         cout << rutaArchivo << endl;
@@ -131,6 +134,7 @@ vector<Log> cargarLogs(string rutaArchivo) {
     int day;
     int year;
 
+    // lee una linea y crea un log
     while (archivo >> month >> day >> year >> time >> ip) {
         getline(archivo, message);
 
@@ -142,7 +146,7 @@ vector<Log> cargarLogs(string rutaArchivo) {
     return lista;
 }
 
-// Ordena los registros usando Bubble Sort
+// ordena los logs usando bubble sort
 void bubbleSort(vector<Log>& logs) {
     int n = logs.size();
 
@@ -157,7 +161,7 @@ void bubbleSort(vector<Log>& logs) {
     }
 }
 
-// Muestra un registro en pantalla
+// muestra un log en la consola
 void mostrarLog(Log registro) {
     cout << registro.month << " "
          << registro.day << " "
@@ -167,10 +171,39 @@ void mostrarLog(Log registro) {
          << registro.message << endl;
 }
 
+// guarda los logs ordenados en otro archivo
+void guardarLogs(vector<Log>& logs, string nombreArchivo) {
+    ofstream archivo(nombreArchivo);
+
+    // revisa si el archivo se pudo crear
+    if (!archivo.is_open()) {
+        cout << "No se pudo crear el archivo de salida." << endl;
+        return;
+    }
+
+    // guarda cada log con el formato original
+    for (int i = 0; i < logs.size(); i++) {
+        archivo << logs[i].month << " "
+                << logs[i].day << " "
+                << logs[i].year << " "
+                << logs[i].time << " "
+                << logs[i].ip
+                << logs[i].message << endl;
+    }
+
+    archivo.close();
+
+    cout << "Los registros se guardaron en ";
+    cout << nombreArchivo << endl;
+}
+
 int main() {
     cout << "=== Evidencia 1: Ordenamiento de Logs ===" << endl;
 
+    // por ahora se usa el primer archivo
     string archivo = "log607-1.txt";
+
+    // carga los logs en el vector
     vector<Log> logs = cargarLogs(archivo);
 
     cout << "Registros leidos: ";
@@ -179,15 +212,21 @@ int main() {
     if (logs.size() > 0) {
         cout << "Ordenando los registros con Bubble Sort..." << endl;
 
+        // ordena los registros
         bubbleSort(logs);
 
         cout << "Los registros fueron ordenados." << endl;
 
+        // crea el archivo con los registros ordenados
+        guardarLogs(logs, "output607.txt");
+
+        // muestra el primer registro
         cout << "Primer registro:" << endl;
         mostrarLog(logs[0]);
 
         int ultimaPosicion = logs.size() - 1;
 
+        // muestra el ultimo registro
         cout << "Ultimo registro:" << endl;
         mostrarLog(logs[ultimaPosicion]);
     }
