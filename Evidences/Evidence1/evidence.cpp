@@ -214,6 +214,54 @@ void insertionSort(vector<Log>& logs) {
     }
 }
 
+// junta dos partes ordenadas
+void merge(vector<Log>& logs, int inicio, int mitad, int fin) {
+    vector<Log> temporal;
+
+    int i = inicio;
+    int j = mitad + 1;
+
+    while (i <= mitad && j <= fin) {
+        if (logs[i] <= logs[j]) {
+            temporal.push_back(logs[i]);
+            i++;
+        }
+        else {
+            temporal.push_back(logs[j]);
+            j++;
+        }
+    }
+
+    // agrega los que faltan de la izquierda
+    while (i <= mitad) {
+        temporal.push_back(logs[i]);
+        i++;
+    }
+
+    // agrega los que faltan de la derecha
+    while (j <= fin) {
+        temporal.push_back(logs[j]);
+        j++;
+    }
+
+    // pasa los datos al vector original
+    for (int k = 0; k < temporal.size(); k++) {
+        logs[inicio + k] = temporal[k];
+    }
+}
+
+// divide el vector y despues junta las partes
+void mergeSort(vector<Log>& logs, int inicio, int fin) {
+    if (inicio < fin) {
+        int mitad = (inicio + fin) / 2;
+
+        mergeSort(logs, inicio, mitad);
+        mergeSort(logs, mitad + 1, fin);
+
+        merge(logs, inicio, mitad, fin);
+    }
+}
+
 // muestra un log en la consola
 void mostrarLog(Log registro) {
     cout << registro.month << " "
@@ -270,6 +318,7 @@ int main() {
         cout << "2. Selection Sort" << endl;
         cout << "3. Bubble Sort" << endl;
         cout << "4. Insertion Sort" << endl;
+        cout << "5. Merge Sort" << endl;
         cout << "Opcion: ";
         cin >> opcion;
 
@@ -288,6 +337,10 @@ int main() {
         else if (opcion == 4) {
             cout << "Ordenando con Insertion Sort..." << endl;
             insertionSort(logs);
+        }
+        else if (opcion == 5) {
+            cout << "Ordenando con Merge Sort..." << endl;
+            mergeSort(logs, 0, logs.size() - 1);
         }
         else {
             cout << "La opcion no es valida." << endl;
