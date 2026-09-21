@@ -146,6 +146,42 @@ vector<Log> cargarLogs(string rutaArchivo) {
     return lista;
 }
 
+// ordena comparando cada elemento con los siguientes
+void swapSort(vector<Log>& logs) {
+    int n = logs.size();
+
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (logs[i] > logs[j]) {
+                Log temporal = logs[i];
+                logs[i] = logs[j];
+                logs[j] = temporal;
+            }
+        }
+    }
+}
+
+// busca el menor y lo coloca en su posicion
+void selectionSort(vector<Log>& logs) {
+    int n = logs.size();
+
+    for (int i = 0; i < n - 1; i++) {
+        int menor = i;
+
+        for (int j = i + 1; j < n; j++) {
+            if (logs[j] < logs[menor]) {
+                menor = j;
+            }
+        }
+
+        if (menor != i) {
+            Log temporal = logs[i];
+            logs[i] = logs[menor];
+            logs[menor] = temporal;
+        }
+    }
+}
+
 // ordena los logs usando bubble sort
 void bubbleSort(vector<Log>& logs) {
     int n = logs.size();
@@ -203,30 +239,48 @@ int main() {
     // por ahora se usa el primer archivo
     string archivo = "log607-1.txt";
 
-    // carga los logs en el vector
     vector<Log> logs = cargarLogs(archivo);
 
     cout << "Registros leidos: ";
     cout << logs.size() << endl;
 
     if (logs.size() > 0) {
-        cout << "Ordenando los registros con Bubble Sort..." << endl;
+        int opcion;
 
-        // ordena los registros
-        bubbleSort(logs);
+        cout << endl;
+        cout << "Elige un algoritmo:" << endl;
+        cout << "1. Swap Sort" << endl;
+        cout << "2. Selection Sort" << endl;
+        cout << "3. Bubble Sort" << endl;
+        cout << "Opcion: ";
+        cin >> opcion;
+
+        if (opcion == 1) {
+            cout << "Ordenando con Swap Sort..." << endl;
+            swapSort(logs);
+        }
+        else if (opcion == 2) {
+            cout << "Ordenando con Selection Sort..." << endl;
+            selectionSort(logs);
+        }
+        else if (opcion == 3) {
+            cout << "Ordenando con Bubble Sort..." << endl;
+            bubbleSort(logs);
+        }
+        else {
+            cout << "La opcion no es valida." << endl;
+            return 0;
+        }
 
         cout << "Los registros fueron ordenados." << endl;
 
-        // crea el archivo con los registros ordenados
         guardarLogs(logs, "output607.txt");
 
-        // muestra el primer registro
         cout << "Primer registro:" << endl;
         mostrarLog(logs[0]);
 
         int ultimaPosicion = logs.size() - 1;
 
-        // muestra el ultimo registro
         cout << "Ultimo registro:" << endl;
         mostrarLog(logs[ultimaPosicion]);
     }
