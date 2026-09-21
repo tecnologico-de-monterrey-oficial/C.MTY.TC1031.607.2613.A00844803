@@ -14,3 +14,11 @@ Tiempo: 835879 microsegundos
 Complejidad: mejor O(n^2), peor O(n^2)
 Coincidio con la prediccion: 2
 ------------------------
+Archivo: log607-2.txt
+Algoritmo: Bubble Sort
+Cantidad de registros: 6818
+Prediccion: creo que sera rapido
+Tiempo: 822400 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: no
+------------------------

@@ -375,6 +375,127 @@ void guardarResultado(string archivo, string algoritmo, int cantidad,
     reporte.close();
 }
 
+// convierte la fecha escrita por el usuario en una clave
+bool leerFecha(string texto, string& clave) {
+    string mes;
+    string hora;
+    string extra;
+    int dia;
+    int anio;
+
+    stringstream datos(texto);
+
+    if (!(datos >> mes >> dia >> anio >> hora)) {
+        return false;
+    }
+
+    // no debe haber datos extras
+    if (datos >> extra) {
+        return false;
+    }
+
+    if (obtenerNumeroMes(mes) == "00") {
+        return false;
+    }
+
+    if (dia < 1 || dia > 31) {
+        return false;
+    }
+
+    if (hora.size() != 8 || hora[2] != ':' || hora[5] != ':') {
+        return false;
+    }
+
+    int numeroHora;
+    int minuto;
+    int segundo;
+    char punto1;
+    char punto2;
+
+    stringstream revisarHora(hora);
+
+    if (!(revisarHora >> numeroHora >> punto1
+                      >> minuto >> punto2 >> segundo)) {
+        return false;
+    }
+
+    if (punto1 != ':' || punto2 != ':') {
+        return false;
+    }
+
+    if (numeroHora < 0 || numeroHora > 23 ||
+        minuto < 0 || minuto > 59 ||
+        segundo < 0 || segundo > 59) {
+        return false;
+    }
+
+    Log fecha(anio, mes, dia, hora, "", "");
+    clave = fecha.key;
+
+    return true;
+}
+
+// busca el primer registro igual o mayor al inicio
+int buscarInicio(vector<Log>& logs, string clave) {
+    int izquierda = 0;
+    int derecha = logs.size();
+
+    while (izquierda < derecha) {
+        int mitad = (izquierda + derecha) / 2;
+
+        if (logs[mitad].key < clave) {
+            izquierda = mitad + 1;
+        }
+        else {
+            derecha = mitad;
+        }
+    }
+
+    return izquierda;
+}
+
+// busca la posicion despues del ultimo registro igual al fin
+int buscarFin(vector<Log>& logs, string clave) {
+    int izquierda = 0;
+    int derecha = logs.size();
+
+    while (izquierda < derecha) {
+        int mitad = (izquierda + derecha) / 2;
+
+        if (logs[mitad].key <= clave) {
+            izquierda = mitad + 1;
+        }
+        else {
+            derecha = mitad;
+        }
+    }
+
+    return izquierda;
+}
+
+// guarda los registros encontrados
+void guardarRango(vector<Log>& logs, int inicio, int fin) {
+    ofstream archivo("range607.txt");
+
+    if (!archivo.is_open()) {
+        cout << "No se pudo crear range607.txt." << endl;
+        return;
+    }
+
+    for (int i = inicio; i < fin; i++) {
+        archivo << logs[i].month << " "
+                << logs[i].day << " "
+                << logs[i].year << " "
+                << logs[i].time << " "
+                << logs[i].ip
+                << logs[i].message << endl;
+    }
+
+    archivo.close();
+
+    cout << "El rango se guardo en range607.txt." << endl;
+}
+
 int main() {
     int repetir = 1;
 
@@ -520,6 +641,52 @@ int main() {
             complejidad,
             coincidencia
         );
+
+        // limpia el salto de linea que quedo en cin
+        cin.ignore(1000, '\n');
+
+        string fechaInicio;
+        string fechaFin;
+        string claveInicio;
+        string claveFin;
+
+        cout << endl;
+        cout << "Busqueda por rango" << endl;
+        cout << "Formato: Sep 8 2024 00:22:43" << endl;
+
+        cout << "Fecha y hora de inicio: ";
+        getline(cin, fechaInicio);
+
+        cout << "Fecha y hora de fin: ";
+        getline(cin, fechaFin);
+
+        bool inicioValido = leerFecha(fechaInicio, claveInicio);
+        bool finValido = leerFecha(fechaFin, claveFin);
+
+        if (!inicioValido || !finValido) {
+            cout << "El formato de alguna fecha no es valido." << endl;
+        }
+        else if (claveInicio > claveFin) {
+            cout << "La fecha de inicio no puede ser mayor." << endl;
+        }
+        else {
+            int inicioRango = buscarInicio(logs, claveInicio);
+            int finRango = buscarFin(logs, claveFin);
+
+            guardarRango(logs, inicioRango, finRango);
+
+            cout << "Registros encontrados: ";
+            cout << finRango - inicioRango << endl;
+
+            if (inicioRango == finRango) {
+                cout << "El rango esta vacio." << endl;
+            }
+            else {
+                for (int i = inicioRango; i < finRango; i++) {
+                    mostrarLog(logs[i]);
+                }
+            }
+        }
 
         cout << endl;
         cout << "Deseas hacer otra corrida? (1 = si, 0 = no): ";
