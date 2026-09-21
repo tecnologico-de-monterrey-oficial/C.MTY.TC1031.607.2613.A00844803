@@ -1,0 +1,16 @@
+Archivo: log607-2.txt
+Algoritmo: Shell Sort
+Cantidad de registros: 6818
+Prediccion: rapido porque lo vi en clase
+Tiempo: 25874 microsegundos
+Complejidad: mejor O(n log n), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Swap Sort
+Cantidad de registros: 6818
+Prediccion: 2
+Tiempo: 835879 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: 2
+------------------------

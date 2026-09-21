@@ -2,6 +2,8 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <chrono>
+#include <sstream>
 #include "log.h"
 
 using namespace std;
@@ -294,6 +296,25 @@ void quickSort(vector<Log>& logs, int inicio, int fin) {
     }
 }
 
+// ordena usando espacios entre los elementos
+void shellSort(vector<Log>& logs) {
+    int n = logs.size();
+
+    for (int espacio = n / 2; espacio > 0; espacio = espacio / 2) {
+        for (int i = espacio; i < n; i++) {
+            Log temporal = logs[i];
+            int j = i;
+
+            while (j >= espacio && logs[j - espacio] > temporal) {
+                logs[j] = logs[j - espacio];
+                j = j - espacio;
+            }
+
+            logs[j] = temporal;
+        }
+    }
+}
+
 // muestra un log en la consola
 void mostrarLog(Log registro) {
     cout << registro.month << " "
@@ -330,18 +351,67 @@ void guardarLogs(vector<Log>& logs, string nombreArchivo) {
     cout << nombreArchivo << endl;
 }
 
+// guarda los datos de cada corrida
+void guardarResultado(string archivo, string algoritmo, int cantidad,
+                      string prediccion, long long tiempo,
+                      string complejidad, string coincidencia) {
+    ofstream reporte("resultados607.txt", ios::app);
+
+    if (!reporte.is_open()) {
+        cout << "No se pudo guardar el resultado." << endl;
+        return;
+    }
+
+    reporte << "Archivo: " << archivo << endl;
+    reporte << "Algoritmo: " << algoritmo << endl;
+    reporte << "Cantidad de registros: " << cantidad << endl;
+    reporte << "Prediccion: " << prediccion << endl;
+    reporte << "Tiempo: " << tiempo << " microsegundos" << endl;
+    reporte << "Complejidad: " << complejidad << endl;
+    reporte << "Coincidio con la prediccion: ";
+    reporte << coincidencia << endl;
+    reporte << "------------------------" << endl;
+
+    reporte.close();
+}
+
 int main() {
-    cout << "=== Evidencia 1: Ordenamiento de Logs ===" << endl;
+    int repetir = 1;
 
-    // por ahora se usa el primer archivo
-    string archivo = "log607-1.txt";
+    do {
+        cout << endl;
+        cout << "=== Evidencia 1: Ordenamiento de Logs ===" << endl;
 
-    vector<Log> logs = cargarLogs(archivo);
+        int opcionArchivo;
+        string archivo;
 
-    cout << "Registros leidos: ";
-    cout << logs.size() << endl;
+        cout << "Selecciona un archivo:" << endl;
+        cout << "1. log607-1.txt" << endl;
+        cout << "2. log607-2.txt" << endl;
+        cout << "Opcion: ";
+        cin >> opcionArchivo;
 
-    if (logs.size() > 0) {
+        if (opcionArchivo == 1) {
+            archivo = "log607-1.txt";
+        }
+        else if (opcionArchivo == 2) {
+            archivo = "log607-2.txt";
+        }
+        else {
+            cout << "La opcion no es valida." << endl;
+            continue;
+        }
+
+        vector<Log> logs = cargarLogs(archivo);
+
+        cout << "Registros leidos: ";
+        cout << logs.size() << endl;
+
+        if (logs.size() == 0) {
+            cout << "No hay registros para ordenar." << endl;
+            continue;
+        }
+
         int opcion;
 
         cout << endl;
@@ -352,39 +422,79 @@ int main() {
         cout << "4. Insertion Sort" << endl;
         cout << "5. Merge Sort" << endl;
         cout << "6. Quick Sort" << endl;
+        cout << "7. Shell Sort" << endl;
         cout << "Opcion: ";
         cin >> opcion;
 
+        if (opcion < 1 || opcion > 7) {
+            cout << "La opcion no es valida." << endl;
+            continue;
+        }
+
+        string prediccion;
+
+        cin.ignore(1000, '\n');
+
+        cout << "Escribe si crees que sera rapido o lento y por que:" << endl;
+        getline(cin, prediccion);
+
+        string algoritmo;
+        string complejidad;
+
+        // empieza a medir el tiempo
+        auto inicio = chrono::high_resolution_clock::now();
+
         if (opcion == 1) {
-            cout << "Ordenando con Swap Sort..." << endl;
+            algoritmo = "Swap Sort";
+            complejidad = "mejor O(n^2), peor O(n^2)";
             swapSort(logs);
         }
         else if (opcion == 2) {
-            cout << "Ordenando con Selection Sort..." << endl;
+            algoritmo = "Selection Sort";
+            complejidad = "mejor O(n^2), peor O(n^2)";
             selectionSort(logs);
         }
         else if (opcion == 3) {
-            cout << "Ordenando con Bubble Sort..." << endl;
+            algoritmo = "Bubble Sort";
+            complejidad = "mejor O(n^2), peor O(n^2)";
             bubbleSort(logs);
         }
         else if (opcion == 4) {
-            cout << "Ordenando con Insertion Sort..." << endl;
+            algoritmo = "Insertion Sort";
+            complejidad = "mejor O(n), peor O(n^2)";
             insertionSort(logs);
         }
         else if (opcion == 5) {
-            cout << "Ordenando con Merge Sort..." << endl;
+            algoritmo = "Merge Sort";
+            complejidad = "mejor O(n log n), peor O(n log n)";
             mergeSort(logs, 0, logs.size() - 1);
         }
         else if (opcion == 6) {
-            cout << "Ordenando con Quick Sort..." << endl;
+            algoritmo = "Quick Sort";
+            complejidad = "mejor O(n log n), peor O(n^2)";
             quickSort(logs, 0, logs.size() - 1);
         }
-        else {
-            cout << "La opcion no es valida." << endl;
-            return 0;
+        else if (opcion == 7) {
+            algoritmo = "Shell Sort";
+            complejidad = "mejor O(n log n), peor O(n^2)";
+            shellSort(logs);
         }
 
-        cout << "Los registros fueron ordenados." << endl;
+        // termina de medir el tiempo
+        auto fin = chrono::high_resolution_clock::now();
+
+        long long tiempo;
+        tiempo = chrono::duration_cast<chrono::microseconds>(
+            fin - inicio
+        ).count();
+
+        cout << endl;
+        cout << "Resultado de la corrida" << endl;
+        cout << "Archivo: " << archivo << endl;
+        cout << "Algoritmo: " << algoritmo << endl;
+        cout << "Cantidad de registros: " << logs.size() << endl;
+        cout << "Tiempo: " << tiempo << " microsegundos" << endl;
+        cout << "Complejidad: " << complejidad << endl;
 
         guardarLogs(logs, "output607.txt");
 
@@ -395,10 +505,29 @@ int main() {
 
         cout << "Ultimo registro:" << endl;
         mostrarLog(logs[ultimaPosicion]);
-    }
-    else {
-        cout << "No hay registros para ordenar." << endl;
-    }
+
+        string coincidencia;
+
+        cout << "Coincidio con tu prediccion? (si/no): ";
+        cin >> coincidencia;
+
+        guardarResultado(
+            archivo,
+            algoritmo,
+            logs.size(),
+            prediccion,
+            tiempo,
+            complejidad,
+            coincidencia
+        );
+
+        cout << endl;
+        cout << "Deseas hacer otra corrida? (1 = si, 0 = no): ";
+        cin >> repetir;
+
+    } while (repetir == 1);
+
+    cout << "Programa terminado." << endl;
 
     return 0;
 }
