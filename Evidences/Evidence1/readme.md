@@ -1,113 +1,78 @@
-```text
-Sep 8 2024 00:22:43 10.14.168.155 Unencrypted communication
-```
+# Evidencia 1
 
-Para las búsquedas se utiliza el mismo formato de fecha y hora:
+César Cárdenas - A00844803
 
-```text
-Sep 8 2024 00:22:43
-```
+## Descripción
 
-## Algoritmos implementados
+Este programa lee dos archivos de logs y ordena sus registros por fecha y hora. Después permite buscar registros dentro de un rango de fechas utilizando búsqueda binaria.
 
-El programa incluye los siguientes algoritmos:
+Los archivos utilizados son:
 
-1. Swap Sort
-2. Selection Sort
-3. Bubble Sort
-4. Insertion Sort
-5. Merge Sort
-6. Quick Sort
-7. Shell Sort
+- `log607-1.txt`, que está desordenado.
+- `log607-2.txt`, que está casi ordenado y tiene timestamps repetidos.
 
-Shell Sort fue el algoritmo extra agregado en la Actividad 1.5.
+## Algoritmos
 
-## Compilación
+Los algoritmos que incluí son:
 
-Para compilar el programa se utiliza:
+- Swap Sort
+- Selection Sort
+- Bubble Sort
+- Insertion Sort
+- Merge Sort
+- Quick Sort
+- Shell Sort
+
+Shell Sort fue el algoritmo extra que agregué en la Actividad 1.5.
+
+## Cómo compilar
+
+Todos los archivos deben estar en la misma carpeta. Para compilar se usa:
 
 ```bash
 g++ evidence.cpp -o evidence
 ```
 
-## Ejecución
-
-Para ejecutar el programa:
+Para ejecutar:
 
 ```bash
 ./evidence
 ```
 
-Durante la ejecución, el usuario debe:
+El programa pide elegir un archivo y un algoritmo. Antes de ordenar también pide escribir una predicción sobre si será rápido o lento.
 
-1. Elegir uno de los dos archivos.
-2. Elegir un algoritmo.
-3. Escribir una predicción sobre el tiempo.
-4. Revisar el tiempo obtenido.
-5. Indicar si el resultado coincidió con la predicción.
-6. Escribir una fecha inicial y una fecha final.
-7. Elegir si desea realizar otra corrida.
+Después muestra el tiempo de ejecución y permite buscar registros entre dos fechas.
 
-## Archivos generados
+El formato de las fechas es:
 
-El programa genera estos archivos:
+```text
+Sep 8 2024 00:22:43
+```
 
-- `output607.txt`: contiene los registros ordenados de la corrida más reciente.
-- `range607.txt`: contiene los registros encontrados en el último rango.
-- `resultados607.txt`: guarda los datos y tiempos de las corridas realizadas.
+## Archivos de salida
+
+El programa crea estos archivos:
+
+- `output607.txt`: contiene los registros ordenados.
+- `range607.txt`: contiene los registros encontrados en el rango.
+- `resultados607.txt`: guarda los tiempos y datos de las corridas.
 
 ## Búsqueda por rango
 
-La búsqueda se realiza sobre los datos previamente ordenados.
+Para buscar el rango utilicé dos búsquedas binarias. Una encuentra el primer registro del rango y la otra encuentra la posición después del último.
 
-Se utilizan dos búsquedas binarias:
+Esto permite incluir correctamente los timestamps repetidos de `log607-2.txt`, sin perder registros ni escribirlos dos veces.
 
-- `buscarInicio` encuentra el primer registro igual o mayor que la fecha inicial.
-- `buscarFin` encuentra la posición después del último registro igual que la fecha final.
+## Uso de IA
 
-Esto permite incluir todos los registros con timestamps duplicados sin perderlos ni repetirlos.
+Utilicé inteligencia artificial para resolver dudas de sintaxis, revisar errores y adaptar los algoritmos que ya había hecho en la Actividad 1.5.
 
-## Complejidades
+No todas las sugerencias fueron correctas. Al principio los meses se comparaban como texto y los días no tenían siempre la misma cantidad de caracteres. También se estaba leyendo el año como si fuera la hora.
 
-| Algoritmo | Mejor caso | Peor caso |
-|---|---:|---:|
-| Swap Sort | O(n²) | O(n²) |
-| Selection Sort | O(n²) | O(n²) |
-| Bubble Sort | O(n²) | O(n²) |
-| Insertion Sort | O(n) | O(n²) |
-| Merge Sort | O(n log n) | O(n log n) |
-| Quick Sort | O(n log n) | O(n²) |
-| Shell Sort | O(n log n) | O(n²) |
-
-La búsqueda de cada límite del rango tiene complejidad O(log n).
-
-## Uso de inteligencia artificial
-
-Se utilizó inteligencia artificial como apoyo para revisar sintaxis, entender errores y adaptar los algoritmos de la Actividad 1.5 para trabajar con objetos `Log`.
-
-Las sugerencias fueron revisadas y modificadas antes de integrarlas. Por ejemplo, inicialmente se interpretó de forma incorrecta el formato del archivo y el año se estaba leyendo como si fuera la hora. El problema se detectó al revisar la salida y se corrigió la lectura para separar correctamente el año, la hora y la dirección IP.
-
-También se revisó el manejo de los límites de la búsqueda para asegurar que los timestamps duplicados fueran incluidos correctamente.
+Estos errores se detectaron al ejecutar el programa y revisar los resultados. Después se corrigió la clave de comparación y la lectura de cada registro.
 
 ## Video
 
-El video de demostración se encuentra en el siguiente enlace:
+En el siguiente enlace se encuentra el video donde muestro el funcionamiento del programa:
 
-[Ver video de demostración](https://drive.google.com/file/d/19wADqhcEcCqBoc-eeHcIjM71K2xEA8ni/view?usp=sharing)
-
-## Estructura
-
-```text
-Evidence1/
-├── evidence.cpp
-├── log.h
-├── log607-1.txt
-├── log607-2.txt
-├── output607.txt
-├── range607.txt
-├── resultados607.txt
-├── README.md
-└── docs/
-    ├── EvidenciasPruebas.pdf
-    └── ReflexEvidencia1.pdf
-```
+[Ver video](https://drive.google.com/file/d/19wADqhcEcCqBoc-eeHcIjM71K2xEA8ni/view?usp=sharing)
