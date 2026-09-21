@@ -197,6 +197,23 @@ void bubbleSort(vector<Log>& logs) {
     }
 }
 
+// toma cada log y lo coloca en su lugar
+void insertionSort(vector<Log>& logs) {
+    int n = logs.size();
+
+    for (int i = 1; i < n; i++) {
+        Log actual = logs[i];
+        int j = i - 1;
+
+        while (j >= 0 && logs[j] > actual) {
+            logs[j + 1] = logs[j];
+            j--;
+        }
+
+        logs[j + 1] = actual;
+    }
+}
+
 // muestra un log en la consola
 void mostrarLog(Log registro) {
     cout << registro.month << " "
@@ -252,6 +269,7 @@ int main() {
         cout << "1. Swap Sort" << endl;
         cout << "2. Selection Sort" << endl;
         cout << "3. Bubble Sort" << endl;
+        cout << "4. Insertion Sort" << endl;
         cout << "Opcion: ";
         cin >> opcion;
 
@@ -266,6 +284,10 @@ int main() {
         else if (opcion == 3) {
             cout << "Ordenando con Bubble Sort..." << endl;
             bubbleSort(logs);
+        }
+        else if (opcion == 4) {
+            cout << "Ordenando con Insertion Sort..." << endl;
+            insertionSort(logs);
         }
         else {
             cout << "La opcion no es valida." << endl;
