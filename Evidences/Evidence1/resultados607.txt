@@ -38,3 +38,123 @@ Tiempo: 75323 microsegundos
 Complejidad: mejor O(n log n), peor O(n log n)
 Coincidio con la prediccion: si
 ------------------------
+Archivo: log607-1.txt
+Algoritmo: Swap Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea lento porque el archivo está desordenado. Swap Sort compara cada registro con todos los siguientes y puede hacer muchos intercambios.
+Tiempo: 1950194 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-1.txt
+Algoritmo: Selection Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea lento, aunque un poco mejor que con el archivo desordenado. Realiza casi la misma cantidad de comparaciones, pero debería hacer menos intercambios porque los datos ya están casi ordenados.
+Tiempo: 797045 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-1.txt
+Algoritmo: Bubble Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea lento porque debe realizar muchas pasadas e intercambios para acomodar un archivo desordenado. Su complejidad es O(n²).
+Tiempo: 1914751 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-1.txt
+Algoritmo: Insertion Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea lento porque tendrá que mover muchos registros para insertarlos en su posición correcta. En datos desordenados puede llegar a O(n²).
+Tiempo: 702509 microsegundos
+Complejidad: mejor O(n), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-1.txt
+Algoritmo: Merge Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea rápido porque divide los datos en partes pequeñas y su complejidad es O(n log n), incluso cuando el archivo está desordenado.
+Tiempo: 77455 microsegundos
+Complejidad: mejor O(n log n), peor O(n log n)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-1.txt
+Algoritmo: Quick Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea rápido porque en datos desordenados el pivote puede producir divisiones relativamente equilibradas. Su caso promedio es O(n log n).
+Tiempo: 25823 microsegundos
+Complejidad: mejor O(n log n), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-1.txt
+Algoritmo: Shell Sort
+Cantidad de registros: 6818
+Prediccion: Espero que tenga una velocidad media o rápida porque primero mueve registros usando espacios grandes, reduciendo el desorden antes de hacer comparaciones cercanas.
+Tiempo: 24368 microsegundos
+Complejidad: mejor O(n log n), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Swap Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea lento, aunque un poco mejor que con el archivo desordenado. Realiza casi la misma cantidad de comparaciones, pero debería hacer menos intercambios porque los datos ya están casi ordenados.
+Tiempo: 812121 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Selection Sort
+Cantidad de registros: 6818
+Prediccion: Espero que siga siendo lento porque Selection Sort hace prácticamente la misma cantidad de comparaciones aunque el archivo ya esté casi ordenado.
+Tiempo: 797644 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Bubble Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea lento, pero con menos intercambios. Mi versión no tiene una salida anticipada, así que todavía realiza todas las pasadas aunque los datos estén casi ordenados.
+Tiempo: 818040 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Insertion Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea muy rápido porque los registros ya están cerca de su posición final. Insertion Sort normalmente necesita pocos movimientos con datos casi ordenados.
+Tiempo: 7900 microsegundos
+Complejidad: mejor O(n), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Merge Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea rápido, pero parecido a su tiempo con el primer archivo. Merge Sort divide y combina los datos de la misma manera sin aprovechar demasiado que ya estén casi ordenados.
+Tiempo: 74710 microsegundos
+Complejidad: mejor O(n log n), peor O(n log n)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Quick Sort
+Cantidad de registros: 6818
+Prediccion: Espero que pueda ser lento porque mi implementación usa el último registro como pivote. En datos casi ordenados puede producir divisiones desbalanceadas y acercarse a O(n²).
+Tiempo: 663471 microsegundos
+Complejidad: mejor O(n log n), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Shell Sort
+Cantidad de registros: 6818
+Prediccion: Espero que sea rápido porque el archivo ya está casi ordenado y Shell Sort tendrá que hacer pocos movimientos para terminar de acomodarlo.
+Tiempo: 16798 microsegundos
+Complejidad: mejor O(n log n), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-1.txt
+Algoritmo: Swap Sort
+Cantidad de registros: 6818
+Prediccion: 1
+Tiempo: 1983742 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: 1
+------------------------
