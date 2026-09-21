@@ -74,5 +74,4 @@ Estos errores se detectaron al ejecutar el programa y revisar los resultados. De
 ## Video
 
 En el siguiente enlace se encuentra el video donde muestro el funcionamiento del programa:
-
-[Ver video](https://drive.google.com/file/d/19wADqhcEcCqBoc-eeHcIjM71K2xEA8ni/view?usp=sharing)
+https://drive.google.com/file/d/19wADqhcEcCqBoc-eeHcIjM71K2xEA8ni/view?usp=sharing
