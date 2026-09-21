@@ -262,6 +262,38 @@ void mergeSort(vector<Log>& logs, int inicio, int fin) {
     }
 }
 
+// acomoda los elementos usando el ultimo como pivote
+int particion(vector<Log>& logs, int inicio, int fin) {
+    Log pivote = logs[fin];
+    int posicion = inicio - 1;
+
+    for (int i = inicio; i < fin; i++) {
+        if (logs[i] < pivote) {
+            posicion++;
+
+            Log temporal = logs[posicion];
+            logs[posicion] = logs[i];
+            logs[i] = temporal;
+        }
+    }
+
+    Log temporal = logs[posicion + 1];
+    logs[posicion + 1] = logs[fin];
+    logs[fin] = temporal;
+
+    return posicion + 1;
+}
+
+// divide el vector usando un pivote
+void quickSort(vector<Log>& logs, int inicio, int fin) {
+    if (inicio < fin) {
+        int posicionPivote = particion(logs, inicio, fin);
+
+        quickSort(logs, inicio, posicionPivote - 1);
+        quickSort(logs, posicionPivote + 1, fin);
+    }
+}
+
 // muestra un log en la consola
 void mostrarLog(Log registro) {
     cout << registro.month << " "
@@ -319,6 +351,7 @@ int main() {
         cout << "3. Bubble Sort" << endl;
         cout << "4. Insertion Sort" << endl;
         cout << "5. Merge Sort" << endl;
+        cout << "6. Quick Sort" << endl;
         cout << "Opcion: ";
         cin >> opcion;
 
@@ -341,6 +374,10 @@ int main() {
         else if (opcion == 5) {
             cout << "Ordenando con Merge Sort..." << endl;
             mergeSort(logs, 0, logs.size() - 1);
+        }
+        else if (opcion == 6) {
+            cout << "Ordenando con Quick Sort..." << endl;
+            quickSort(logs, 0, logs.size() - 1);
         }
         else {
             cout << "La opcion no es valida." << endl;
