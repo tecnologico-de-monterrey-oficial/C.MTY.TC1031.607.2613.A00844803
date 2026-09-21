@@ -6,3 +6,35 @@ Tiempo: 14661 microsegundos
 Complejidad: mejor O(n log n), peor O(n^2)
 Coincidio con la prediccion: si
 ------------------------
+Archivo: log607-1.txt
+Algoritmo: Selection Sort
+Cantidad de registros: 6818
+Prediccion: 2
+Tiempo: 802415 microsegundos
+Complejidad: mejor O(n^2), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Shell Sort
+Cantidad de registros: 6818
+Prediccion: 22
+Tiempo: 25902 microsegundos
+Complejidad: mejor O(n log n), peor O(n^2)
+Coincidio con la prediccion: no
+------------------------
+Archivo: log607-2.txt
+Algoritmo: Shell Sort
+Cantidad de registros: 6818
+Prediccion: Creo que sera rapido porque el archivo ya esta ordenado por dia mes y year y shel sort tendra que mover menos logs
+Tiempo: 24769 microsegundos
+Complejidad: mejor O(n log n), peor O(n^2)
+Coincidio con la prediccion: si
+------------------------
+Archivo: log607-1.txt
+Algoritmo: Merge Sort
+Cantidad de registros: 6818
+Prediccion: Creo que sera rapido porque tiene complejidad O(n log n)
+Tiempo: 75323 microsegundos
+Complejidad: mejor O(n log n), peor O(n log n)
+Coincidio con la prediccion: si
+------------------------
