@@ -1,18 +1,18 @@
+// David Alonso Cantú Delgado
+// A00189239
 #include <iostream>
-#include <memory>
-#include <string>
+using namespace std;
 #include "LinkedList.h"
 
-using namespace std;
-
 int main() {
-    LinkedList<std::string> list;
 
+    LinkedList<string> list;
     list.push_front("b");
     list.push_front("a");
     list.push_front("@");
+    list.push_front("&");
+    list.print();
 
-    list.print(); // Output: ! World Hello
 
     return 0;
 }

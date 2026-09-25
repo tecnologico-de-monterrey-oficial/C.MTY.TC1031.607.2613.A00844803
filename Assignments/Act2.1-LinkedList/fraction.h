@@ -1,22 +1,40 @@
-#ifndef FRACTION_H
-#define FRACTION_H
-
-class fraccion {
+// David Alonso Cantú Delgado
+// A00189239
+#ifndef Fraction_h
+#define Fraction_h
+#include <iostream>
+// define una clase fracción básica
+class Fraction {
 private:
-	int numerador;
-	int denominador;
-
+    int numerator;
+    int denominator;
 public:
-	fraccion(int numerador = 0, int denominador = 1)
-		: numerador(numerador), denominador(denominador) {}
+    Fraction() : numerator(0), denominator(1) {}
+    Fraction(int num, int den) : numerator(num), denominator(den) {}
 
-	int getNumerador() const {
-		return numerador;
-	}
+    int getNumerator() const {
+        return numerator;
+    }
 
-	int getDenominador() const {
-		return denominador;
-	}
+    int getDenominator() const {
+        return denominator;
+    }
+
+    void setNumerator(int num) {
+        numerator = num;
+    }
+
+    void setDenominator(int den) {
+        denominator = den;
+    }
+
+    void print() const {
+        std::cout << numerator << "/" << denominator << std::endl;
+    }   
+
+    
 };
 
-#endif
+
+
+#endif /* Fraction_h */
