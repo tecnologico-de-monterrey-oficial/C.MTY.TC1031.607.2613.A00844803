@@ -1,8 +1,8 @@
-// David Alonso Cantú Delgado
-// A00189239
+// Cesar Cardenas - A00844803
 #include <iostream>
-using namespace std;
 #include "LinkedList.h"
+
+using namespace std;
 
 int main() {
 

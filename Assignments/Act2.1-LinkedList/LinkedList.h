@@ -1,5 +1,4 @@
-// David Alonso Cantú Delgado
-// A00189239
+// Cesar Cardenas - A00844803
 #ifndef LinkedList_h
 #define LinkedList_h
 

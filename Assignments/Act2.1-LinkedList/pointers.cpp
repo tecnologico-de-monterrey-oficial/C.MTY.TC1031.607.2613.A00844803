@@ -1,5 +1,4 @@
-// David Alonso Cantú Delgado
-// A00189239
+// Cesar Cardenas - A00844803
 #include <iostream>
 #include <memory>
 using namespace std;
