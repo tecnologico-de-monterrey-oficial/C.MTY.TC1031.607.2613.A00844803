@@ -1,217 +1,14 @@
 // Cesar Cardenas - A00844803
 
 #include <iostream>
-#include <stdexcept>
 #include <cstdlib>
 #include <ctime>
+#include <stdexcept>
+#include "LinkedList.h"
+
 using namespace std;
 
-// Nodo de la lista
-template <typename T>
-struct Node {
-    T data;
-    Node<T>* next;
-
-    Node(T value) {
-        data = value;
-        next = nullptr;
-    }
-};
-
-// Lista ligada generica
-template <typename T>
-class LinkedList {
-private:
-    Node<T>* head;
-    int size;
-
-    // Busca el nodo que esta en una posicion
-    Node<T>* getNode(int index) {
-        if (index < 0 || index >= size) {
-            throw out_of_range("La posicion no existe");
-        }
-
-        Node<T>* aux = head;
-
-        for (int i = 0; i < index; i++) {
-            aux = aux->next;
-        }
-
-        return aux;
-    }
-
-public:
-    LinkedList() {
-        head = nullptr;
-        size = 0;
-    }
-
-    // Copia los elementos en nodos independientes
-    LinkedList(const LinkedList<T>& other) {
-        head = nullptr;
-        size = 0;
-        *this = other;
-    }
-
-    // Libera los nodos cuando termina de usarse la lista
-    ~LinkedList() {
-        while (head != nullptr) {
-            Node<T>* aux = head;
-            head = head->next;
-            delete aux;
-        }
-    }
-
-    void addFirst(T data) {
-        Node<T>* node = new Node<T>(data);
-
-        node->next = head;
-        head = node;
-
-        size++;
-    }
-
-    void addLast(T data) {
-        Node<T>* node = new Node<T>(data);
-
-        if (head == nullptr) {
-            head = node;
-        } else {
-            Node<T>* aux = head;
-
-            while (aux->next != nullptr) {
-                aux = aux->next;
-            }
-
-            aux->next = node;
-        }
-
-        size++;
-    }
-
-    // Inserta despues de la posicion indicada
-    void insert(int index, T data) {
-        Node<T>* aux = getNode(index);
-        Node<T>* node = new Node<T>(data);
-
-        node->next = aux->next;
-        aux->next = node;
-
-        size++;
-    }
-
-    bool deleteAt(int index) {
-        if (index < 0 || index >= size) {
-            return false;
-        }
-
-        Node<T>* node;
-
-        if (index == 0) {
-            node = head;
-            head = head->next;
-        } else {
-            Node<T>* previous = getNode(index - 1);
-
-            node = previous->next;
-            previous->next = node->next;
-        }
-
-        delete node;
-        size--;
-
-        return true;
-    }
-
-    int findData(T data) {
-        Node<T>* aux = head;
-        int index = 0;
-
-        while (aux != nullptr) {
-            if (aux->data == data) {
-                return index;
-            }
-
-            aux = aux->next;
-            index++;
-        }
-
-        return -1;
-    }
-
-    bool deleteData(T data) {
-        int index = findData(data);
-
-        return deleteAt(index);
-    }
-
-    T getData(int index) {
-        return getNode(index)->data;
-    }
-
-    void updateAt(int index, T data) {
-        getNode(index)->data = data;
-    }
-
-    void updateData(T oldData, T newData) {
-        int index = findData(oldData);
-
-        if (index == -1) {
-            throw out_of_range("El dato no existe");
-        }
-
-        updateAt(index, newData);
-    }
-
-    // Permite leer y modificar un elemento
-    T& operator[](int index) {
-        return getNode(index)->data;
-    }
-
-    // Duplica los datos de otra lista
-    LinkedList<T>& operator=(const LinkedList<T>& other) {
-        if (this != &other) {
-            // Borra los elementos anteriores
-            while (head != nullptr) {
-                Node<T>* aux = head;
-                head = head->next;
-                delete aux;
-            }
-
-            size = 0;
-
-            // Copia los elementos de la otra lista
-            Node<T>* aux = other.head;
-
-            while (aux != nullptr) {
-                addLast(aux->data);
-                aux = aux->next;
-            }
-        }
-
-        return *this;
-    }
-
-    void print() {
-        Node<T>* aux = head;
-
-        cout << "[";
-
-        while (aux != nullptr) {
-            cout << aux->data;
-
-            if (aux->next != nullptr) {
-                cout << ", ";
-            }
-
-            aux = aux->next;
-        }
-
-        cout << "]" << endl;
-    }
-};
-
-// El mismo menu funciona para ambos tipos de datos
+// Este menu funciona con enteros y decimales
 template <typename T>
 void menu() {
     LinkedList<T> list;
@@ -246,7 +43,6 @@ void menu() {
             cout << "Dato: ";
             cin >> data;
         } else {
-            // Genera un numero y lo convierte al tipo elegido
             data = static_cast<T>((rand() % 1000) / 10.0);
         }
 
@@ -301,13 +97,23 @@ void menu() {
             case 4:
                 cout << "Dato a borrar: ";
                 cin >> data;
-                cout << boolalpha << list.deleteData(data) << endl;
+
+                if (list.deleteData(data)) {
+                    cout << "Dato borrado" << endl;
+                } else {
+                    cout << "El dato no existe" << endl;
+                }
                 break;
 
             case 5:
                 cout << "Posicion: ";
                 cin >> index;
-                cout << boolalpha << list.deleteAt(index) << endl;
+
+                if (list.deleteAt(index)) {
+                    cout << "Dato borrado" << endl;
+                } else {
+                    cout << "La posicion no existe" << endl;
+                }
                 break;
 
             case 6:
@@ -336,7 +142,8 @@ void menu() {
             case 9:
                 cout << "Dato a buscar: ";
                 cin >> data;
-                cout << "Posicion: " << list.findData(data) << endl;
+                index = list.findData(data);
+                cout << "Posicion: " << index << endl;
                 break;
 
             case 10:
