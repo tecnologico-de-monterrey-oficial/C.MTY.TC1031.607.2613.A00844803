@@ -7,10 +7,10 @@ using namespace std;
 int main() {
 
     LinkedList<string> list;
-    list.push_front("b");
-    list.push_front("a");
-    list.push_front("@");
-    list.push_front("&");
+    list.insert("b", 0);
+    list.insert("a", 1);
+    list.insert("@", 2);
+    list.insert("&", 3);
     list.print();
 
 
