@@ -1,6 +1,7 @@
 // Cesar Cardenas - A00844803
 #ifndef STACK_H
 #define STACK_H
+#include <stdexcept>
 
 template <typename T>
 struct Node {
@@ -23,6 +24,41 @@ public:
     Stack() {
         head = nullptr;
         size = 0;
+    }
+
+        void push(T data) {
+        Node<T>* node = new Node<T>(data);
+
+        node->next = head;
+        head = node;
+        size++;
+    }
+
+    T pop() {
+        if (head == nullptr) {
+            throw std::out_of_range("La pila esta vacia");
+        }
+
+        T data = head->data;
+        Node<T>* aux = head;
+
+        head = head->next;
+        delete aux;
+        size--;
+
+        return data;
+    }
+
+    T top() {
+        if (head == nullptr) {
+            throw std::out_of_range("La pila esta vacia");
+        }
+
+        return head->data;
+    }
+
+    int getSize() {
+        return size;
     }
 
     ~Stack() {
