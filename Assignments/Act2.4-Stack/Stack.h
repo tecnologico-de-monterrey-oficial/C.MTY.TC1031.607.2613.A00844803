@@ -3,6 +3,8 @@
 #define STACK_H
 #include <stdexcept>
 
+using namespace std;
+
 template <typename T>
 struct Node {
     T data;
@@ -36,7 +38,7 @@ public:
 
     T pop() {
         if (head == nullptr) {
-            throw std::out_of_range("La pila esta vacia");
+            throw out_of_range("La pila esta vacia");
         }
 
         T data = head->data;
@@ -51,7 +53,7 @@ public:
 
     T top() {
         if (head == nullptr) {
-            throw std::out_of_range("La pila esta vacia");
+            throw out_of_range("La pila esta vacia");
         }
 
         return head->data;
