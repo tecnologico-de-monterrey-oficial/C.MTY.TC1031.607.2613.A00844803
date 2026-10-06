@@ -27,6 +27,24 @@ public:
         size = 0;
     }
 
+        void push(T data) {
+        Node<T>* node = new Node<T>(data);
+
+        if (head == nullptr) {
+            head = node;
+            tail = node;
+        } else {
+            tail->next = node;
+            tail = node;
+        }
+
+        size++;
+    }
+
+    int getSize() {
+        return size;
+    }
+
     // Libera los nodos al terminar de usar la fila.
     ~Queue() {
         while (head != nullptr) {
