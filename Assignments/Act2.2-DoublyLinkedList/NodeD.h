@@ -1,3 +1,4 @@
+// Cesar Cardenas - A00844803
 #pragma once
 
 template <typename T>
@@ -6,6 +7,9 @@ struct NodeD {
     NodeD<T>* next;
     NodeD<T>* prev;
 
-    NodeD(const T& value) : data(value), next(nullptr), prev(nullptr) {}
-    NodeD(const T& value, NodeD<T>* nextNode, NodeD<T>* prevNode) : data(value), next(nextNode), prev(prevNode) {} 
+    NodeD(const T& value)
+        : data(value), next(nullptr), prev(nullptr) {}
+
+    NodeD(const T& value, NodeD<T>* nextNode, NodeD<T>* prevNode)
+        : data(value), next(nextNode), prev(prevNode) {}
 };

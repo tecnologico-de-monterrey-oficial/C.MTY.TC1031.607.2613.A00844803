@@ -1,6 +1,9 @@
-#ifndef DoublyLinkedList_h
-#define DoublyLinkedList_h
+// Cesar Cardenas - A00844803
+#ifndef DOUBLY_LINKED_LIST_H
+#define DOUBLY_LINKED_LIST_H
 
+#include <iostream>
+#include <stdexcept>
 #include "NodeD.h"
 
 template <typename T>
@@ -8,115 +11,107 @@ class DoublyLinkedList {
 private:
     NodeD<T>* head;
     NodeD<T>* tail;
-    int size = 0;
+    int size;
+
+    // Busca el nodo de una posicion.
+    NodeD<T>* getNode(int index) {
+        if (index < 0 || index >= size) {
+            throw std::out_of_range("Indice invalido");
+        }
+
+        NodeD<T>* aux = head;
+
+        for (int i = 0; i < index; i++) {
+            aux = aux->next;
+        }
+
+        return aux;
+    }
+
 public:
-    DoublyLinkedList() : head(nullptr), tail(nullptr), size(0) {}
-    void addFirst(T data);
-    void addLast(T data);
-    void insert(int index, T data);
-};
-
-template <typename T>
-void DoublyLinkedList<T>::addFirst(T data) {
-    // validamos si la lista está vacía
-    if (head == nullptr) {
-        // si está vacía la lista
-        // apunto head a un nuevo nodo con data
-        head = new NodeD<T>(data);
-        // apunto tail a head
-        tail = head;
-        // incremento size
-        size++;
-    } else {
-        // la lista no está vacía
-        // creamos un nuevo nodo
-        NodeD<T>* aux = new NodeD<T>(data);
-        // apuntamos el next de aux a head
-        aux->next = head;
-        // apuntamos el prev de head a aux
-        head->prev = aux;
-        // apuntamos head a aux
-        head = aux;
-        // incrementamos size
-        size++;
+    DoublyLinkedList() {
+        head = nullptr;
+        tail = nullptr;
+        size = 0;
     }
-}
 
-template <typename T>
-void DoublyLinkedList<T>::addLast(T data) {
-    // validamos si la lista está vacía
-    if (head == nullptr) {
-        // si está vacía la lista
-        // apunto head a un nuevo nodo con data
-        head = new NodeD<T>(data);
-        // apunto tail a head
-        tail = head;
-        // incremento size
-        size++;
-    } else {
-        // la lista no está vacía
-        // creamos un nuevo nodo
-        NodeD<T>* aux = new NodeD<T>(data);
-        // apuntamos el prev de aux a tail
-        aux->prev = tail;
-        // apuntamos el next de tail a aux
-        tail->next = aux;
-        // apuntamos tail a aux
-        tail = aux;
-        // incrementamos size
-        size++;
-    }
-}
+    void addFirst(T data) {
+        NodeD<T>* node = new NodeD<T>(data);
+        node->next = head;
 
-template <typename T>
-void DoublyLinkedList<T>::insert(int index, T data) {
-    // validamos que él índice sea válido
-    if (index >= 0 && index <= size-1) {
-        // validamos que el indice sea desde 0 hasta el penúltimo
-        if (index != size-1) {
-            // el index es desde 0 hasta el penúltimo (en medio)
-            // creamos un indice auxiliar igual a 0
-            int auxIndex = 0;
-            // creamos un apuntador auxiliar igual a head
-            NodeD<T>* aux = head;
-            // iteramos hasta encontrar el índice dato
-            while (auxIndex < index) {
-                // recorremos aux
-                aux = aux->next;
-                // incrementamos el indice auxiliar
-                auxIndex++;
-            }
-            // creamos un nodo nuevo
-            NodeD<T>* auxNew = NodeD<T>(data);
-            // el prev del nuevo lo apuntamos a aux
-            auxNew->prev = aux;
-            // el next del nuevo lo apuntamos a aux->next
-            auxNew->next = aux->next;
-            // el prev del siguiente de aux lo apuntamos al nuevo
-            aux->next->prev = auxNew;
-            // apuntamos aux next al nuevo
-            aux->next = auxNew;
-            // incrmenetamos size
-            size++;
+        if (head == nullptr) {
+            tail = node;
         } else {
-            // el index es igual a size -1
-            // hacemos como si fuera addLast
-            // creamos un nuevo nodo
-            NodeD<T>* aux = new NodeD<T>(data);
-            // apuntamos el prev de aux a tail
-            aux->prev = tail;
-            // apuntamos el next de tail a aux
-            tail->next = aux;
-            // apuntamos tail a aux
-            tail = aux;
-            // incrementamos size
+            head->prev = node;
+        }
+
+        head = node;
+        size++;
+    }
+
+    void addLast(T data) {
+        NodeD<T>* node = new NodeD<T>(data);
+        node->prev = tail;
+
+        if (tail == nullptr) {
+            head = node;
+        } else {
+            tail->next = node;
+        }
+
+        tail = node;
+        size++;
+    }
+
+    // Inserta a la derecha del indice.
+    void insert(int index, T data) {
+        NodeD<T>* aux = getNode(index);
+
+        if (aux == tail) {
+            addLast(data);
+        } else {
+            NodeD<T>* node = new NodeD<T>(data);
+
+            node->prev = aux;
+            node->next = aux->next;
+            aux->next->prev = node;
+            aux->next = node;
+
             size++;
         }
-    } else {
-        throw out_of_range("Índice inválido");
     }
-    
-}
 
+    void clear() {
+        while (head != nullptr) {
+            NodeD<T>* aux = head;
+            head = head->next;
+            delete aux;
+        }
 
-#endif /* DoublyLinkedList_h */
+        tail = nullptr;
+        size = 0;
+    }
+
+    void print() {
+        NodeD<T>* aux = head;
+        std::cout << "[";
+
+        while (aux != nullptr) {
+            std::cout << aux->data;
+
+            if (aux->next != nullptr) {
+                std::cout << ", ";
+            }
+
+            aux = aux->next;
+        }
+
+        std::cout << "]" << std::endl;
+    }
+
+    ~DoublyLinkedList() {
+        clear();
+    }
+};
+
+#endif
