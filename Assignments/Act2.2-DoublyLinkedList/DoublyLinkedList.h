@@ -158,6 +158,47 @@ public:
         return getNode(index)->data;
     }
 
+        void updateAt(int index, T data) {
+        getNode(index)->data = data;
+    }
+
+    void updateData(T oldData, T newData) {
+        int index = findData(oldData);
+
+        if (index == -1) {
+            throw std::out_of_range("El dato no existe");
+        }
+
+        updateAt(index, newData);
+    }
+
+    T& operator[](int index) {
+        return getNode(index)->data;
+    }
+
+    DoublyLinkedList<T>& operator=(const DoublyLinkedList<T>& other) {
+        if (this != &other) {
+            clear();
+            NodeD<T>* aux = other.head;
+
+            while (aux != nullptr) {
+                addLast(aux->data);
+                aux = aux->next;
+            }
+        }
+
+        return *this;
+    }
+
+    // Permite copiar sin compartir los mismos nodos.
+    DoublyLinkedList(const DoublyLinkedList<T>& other) {
+        head = nullptr;
+        tail = nullptr;
+        size = 0;
+
+        *this = other;
+    }
+
     ~DoublyLinkedList() {
         clear();
     }
