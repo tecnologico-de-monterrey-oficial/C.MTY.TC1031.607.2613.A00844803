@@ -199,6 +199,63 @@ public:
         *this = other;
     }
 
+        // Ordenamiento burbuja.
+    void sort() {
+        for (int i = 0; i < size - 1; i++) {
+            NodeD<T>* aux = head;
+
+            for (int j = 0; j < size - 1 - i; j++) {
+                if (aux->data > aux->next->data) {
+                    T temp = aux->data;
+                    aux->data = aux->next->data;
+                    aux->next->data = temp;
+                }
+
+                aux = aux->next;
+            }
+        }
+    }
+
+    // Repite cada elemento dos veces.
+    void duplicate() {
+        NodeD<T>* aux = head;
+
+        while (aux != nullptr) {
+            NodeD<T>* copy = new NodeD<T>(aux->data);
+
+            copy->prev = aux;
+            copy->next = aux->next;
+
+            if (aux->next == nullptr) {
+                tail = copy;
+            } else {
+                aux->next->prev = copy;
+            }
+
+            aux->next = copy;
+            size++;
+
+            // Avanza al siguiente nodo original.
+            aux = copy->next;
+        }
+    }
+
+    void removeDuplicates() {
+        sort();
+
+        NodeD<T>* aux = head;
+        int index = 0;
+
+        while (aux != nullptr && aux->next != nullptr) {
+            if (aux->data == aux->next->data) {
+                deleteAt(index + 1);
+            } else {
+                aux = aux->next;
+                index++;
+            }
+        }
+    }
+
     ~DoublyLinkedList() {
         clear();
     }
