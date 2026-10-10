@@ -109,6 +109,55 @@ public:
         std::cout << "]" << std::endl;
     }
 
+        bool deleteAt(int index) {
+        if (index < 0 || index >= size) {
+            return false;
+        }
+
+        NodeD<T>* aux = getNode(index);
+
+        if (aux->prev == nullptr) {
+            head = aux->next;
+        } else {
+            aux->prev->next = aux->next;
+        }
+
+        if (aux->next == nullptr) {
+            tail = aux->prev;
+        } else {
+            aux->next->prev = aux->prev;
+        }
+
+        delete aux;
+        size--;
+
+        return true;
+    }
+
+    int findData(T data) {
+        NodeD<T>* aux = head;
+        int index = 0;
+
+        while (aux != nullptr) {
+            if (aux->data == data) {
+                return index;
+            }
+
+            aux = aux->next;
+            index++;
+        }
+
+        return -1;
+    }
+
+    bool deleteData(T data) {
+        return deleteAt(findData(data));
+    }
+
+    T getData(int index) {
+        return getNode(index)->data;
+    }
+
     ~DoublyLinkedList() {
         clear();
     }
