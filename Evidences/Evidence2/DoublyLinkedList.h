@@ -1,0 +1,264 @@
+// Cesar Cardenas - A00844803
+#ifndef DOUBLY_LINKED_LIST_H
+#define DOUBLY_LINKED_LIST_H
+
+#include <iostream>
+#include <stdexcept>
+#include "NodeD.h"
+
+template <typename T>
+class DoublyLinkedList {
+private:
+    NodeD<T>* head;
+    NodeD<T>* tail;
+    int size;
+
+    // Busca el nodo de una posicion.
+    NodeD<T>* getNode(int index) {
+        if (index < 0 || index >= size) {
+            throw std::out_of_range("Indice invalido");
+        }
+
+        NodeD<T>* aux = head;
+
+        for (int i = 0; i < index; i++) {
+            aux = aux->next;
+        }
+
+        return aux;
+    }
+
+public:
+    DoublyLinkedList() {
+        head = nullptr;
+        tail = nullptr;
+        size = 0;
+    }
+
+    void addFirst(T data) {
+        NodeD<T>* node = new NodeD<T>(data);
+        node->next = head;
+
+        if (head == nullptr) {
+            tail = node;
+        } else {
+            head->prev = node;
+        }
+
+        head = node;
+        size++;
+    }
+
+    void addLast(T data) {
+        NodeD<T>* node = new NodeD<T>(data);
+        node->prev = tail;
+
+        if (tail == nullptr) {
+            head = node;
+        } else {
+            tail->next = node;
+        }
+
+        tail = node;
+        size++;
+    }
+
+    // Inserta a la derecha del indice.
+    void insert(int index, T data) {
+        NodeD<T>* aux = getNode(index);
+
+        if (aux == tail) {
+            addLast(data);
+        } else {
+            NodeD<T>* node = new NodeD<T>(data);
+
+            node->prev = aux;
+            node->next = aux->next;
+            aux->next->prev = node;
+            aux->next = node;
+
+            size++;
+        }
+    }
+
+    void clear() {
+        while (head != nullptr) {
+            NodeD<T>* aux = head;
+            head = head->next;
+            delete aux;
+        }
+
+        tail = nullptr;
+        size = 0;
+    }
+
+    void print() {
+        NodeD<T>* aux = head;
+        std::cout << "[";
+
+        while (aux != nullptr) {
+            std::cout << aux->data;
+
+            if (aux->next != nullptr) {
+                std::cout << ", ";
+            }
+
+            aux = aux->next;
+        }
+
+        std::cout << "]" << std::endl;
+    }
+
+        bool deleteAt(int index) {
+        if (index < 0 || index >= size) {
+            return false;
+        }
+
+        NodeD<T>* aux = getNode(index);
+
+        if (aux->prev == nullptr) {
+            head = aux->next;
+        } else {
+            aux->prev->next = aux->next;
+        }
+
+        if (aux->next == nullptr) {
+            tail = aux->prev;
+        } else {
+            aux->next->prev = aux->prev;
+        }
+
+        delete aux;
+        size--;
+
+        return true;
+    }
+
+    int findData(T data) {
+        NodeD<T>* aux = head;
+        int index = 0;
+
+        while (aux != nullptr) {
+            if (aux->data == data) {
+                return index;
+            }
+
+            aux = aux->next;
+            index++;
+        }
+
+        return -1;
+    }
+
+    bool deleteData(T data) {
+        return deleteAt(findData(data));
+    }
+
+    T getData(int index) {
+        return getNode(index)->data;
+    }
+
+        void updateAt(int index, T data) {
+        getNode(index)->data = data;
+    }
+
+    void updateData(T oldData, T newData) {
+        int index = findData(oldData);
+
+        if (index == -1) {
+            throw std::out_of_range("El dato no existe");
+        }
+
+        updateAt(index, newData);
+    }
+
+    T& operator[](int index) {
+        return getNode(index)->data;
+    }
+
+    DoublyLinkedList<T>& operator=(const DoublyLinkedList<T>& other) {
+        if (this != &other) {
+            clear();
+            NodeD<T>* aux = other.head;
+
+            while (aux != nullptr) {
+                addLast(aux->data);
+                aux = aux->next;
+            }
+        }
+
+        return *this;
+    }
+
+    // Permite copiar sin compartir los mismos nodos.
+    DoublyLinkedList(const DoublyLinkedList<T>& other) {
+        head = nullptr;
+        tail = nullptr;
+        size = 0;
+
+        *this = other;
+    }
+
+        // Ordenamiento burbuja.
+    void sort() {
+        for (int i = 0; i < size - 1; i++) {
+            NodeD<T>* aux = head;
+
+            for (int j = 0; j < size - 1 - i; j++) {
+                if (aux->data > aux->next->data) {
+                    T temp = aux->data;
+                    aux->data = aux->next->data;
+                    aux->next->data = temp;
+                }
+
+                aux = aux->next;
+            }
+        }
+    }
+
+    // Repite cada elemento dos veces.
+    void duplicate() {
+        NodeD<T>* aux = head;
+
+        while (aux != nullptr) {
+            NodeD<T>* copy = new NodeD<T>(aux->data);
+
+            copy->prev = aux;
+            copy->next = aux->next;
+
+            if (aux->next == nullptr) {
+                tail = copy;
+            } else {
+                aux->next->prev = copy;
+            }
+
+            aux->next = copy;
+            size++;
+
+            // Avanza al siguiente nodo original.
+            aux = copy->next;
+        }
+    }
+
+    void removeDuplicates() {
+        sort();
+
+        NodeD<T>* aux = head;
+        int index = 0;
+
+        while (aux != nullptr && aux->next != nullptr) {
+            if (aux->data == aux->next->data) {
+                deleteAt(index + 1);
+            } else {
+                aux = aux->next;
+                index++;
+            }
+        }
+    }
+
+    ~DoublyLinkedList() {
+        clear();
+    }
+};
+
+#endif
