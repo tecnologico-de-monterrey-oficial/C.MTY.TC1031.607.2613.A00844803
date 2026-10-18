@@ -28,11 +28,126 @@ private:
         return aux;
     }
 
+    NodeD<T>* mergeParts(NodeD<T>* first, NodeD<T>* second,
+                     long long& comparisons) {
+    NodeD<T>* result = nullptr;
+    NodeD<T>* last = nullptr;
+
+    while (first != nullptr && second != nullptr) {
+        NodeD<T>* selected;
+        comparisons++;
+
+        // Si las fechas son iguales, conserva primero el nodo izquierdo.
+        if (!(first->data > second->data)) {
+            selected = first;
+            first = first->next;
+        } else {
+            selected = second;
+            second = second->next;
+        }
+
+        selected->prev = last;
+
+        if (last == nullptr) {
+            result = selected;
+        } else {
+            last->next = selected;
+        }
+
+        last = selected;
+    }
+
+    NodeD<T>* remaining = first != nullptr ? first : second;
+
+    while (remaining != nullptr) {
+        NodeD<T>* next = remaining->next;
+        remaining->prev = last;
+
+        if (last == nullptr) {
+            result = remaining;
+        } else {
+            last->next = remaining;
+        }
+
+        last = remaining;
+        remaining = next;
+    }
+
+    last->next = nullptr;
+    return result;
+}
+
+NodeD<T>* sortParts(NodeD<T>* first, long long& comparisons,
+                    int depth, int& maxDepth) {
+    if (first == nullptr || first->next == nullptr) {
+        return first;
+    }
+
+    if (depth > maxDepth) {
+        maxDepth = depth;
+    }
+
+    NodeD<T>* slow = first;
+    NodeD<T>* fast = first->next;
+
+    while (fast != nullptr && fast->next != nullptr) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    NodeD<T>* second = slow->next;
+    slow->next = nullptr;
+    second->prev = nullptr;
+
+    NodeD<T>* left = sortParts(first, comparisons, depth + 1, maxDepth);
+    NodeD<T>* right = sortParts(second, comparisons, depth + 1, maxDepth);
+
+    return mergeParts(left, right, comparisons);
+}
+
 public:
     DoublyLinkedList() {
         head = nullptr;
         tail = nullptr;
         size = 0;
+    }
+
+    int getSize() const {
+        return size;
+    }
+
+    const NodeD<T>* getHead() const {
+        return head;
+    }
+
+    void mergeSort(long long& comparisons, int& maxDepth) {
+        if (size < 2) {
+            return;
+        }
+
+        head = sortParts(head, comparisons, 1, maxDepth);
+        head->prev = nullptr;
+
+        NodeD<T>* current = head;
+        while (current->next != nullptr) {
+            current = current->next;
+        }
+
+        tail = current;
+    }
+
+    bool isSorted() const {
+        NodeD<T>* current = head;
+
+        while (current != nullptr && current->next != nullptr) {
+            if (current->data > current->next->data) {
+                return false;
+            }
+
+            current = current->next;
+        }
+
+        return true;
     }
 
     void addFirst(T data) {
