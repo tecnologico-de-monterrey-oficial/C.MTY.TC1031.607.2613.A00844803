@@ -1,7 +1,9 @@
-// Cesar Cardenas - A00844803
+//Cesar Cardenas - A00844803
 #ifndef QUEUE_H
 #define QUEUE_H
 #include <stdexcept>
+
+using namespace std;
 
 template <typename T>
 struct QueueNode {
@@ -19,13 +21,13 @@ class Queue {
 private:
     QueueNode<T>* head;
     QueueNode<T>* tail;
-    int size;
+    int count;
 
 public:
     Queue() {
         head = nullptr;
         tail = nullptr;
-        size = 0;
+        count = 0;
     }
 
         void push(T data) {
@@ -39,17 +41,21 @@ public:
             tail = node;
         }
 
-        size++;
+        count++;
     }
 
     int getSize() {
-        return size;
+        return count;
     }
+
+    int size() const { return count; }
+    bool isEmpty() const { return head == nullptr; }
+    void enqueue(T data) { push(data); }
 
         // Consulta el primer dato sin eliminarlo.
     T front() {
         if (head == nullptr) {
-            throw std::out_of_range("La fila esta vacia");
+            throw out_of_range("La fila esta vacia");
         }
 
         return head->data;
@@ -58,7 +64,7 @@ public:
     // Elimina el primer dato y devuelve su valor.
     T pop() {
         if (head == nullptr) {
-            throw std::out_of_range("La fila esta vacia");
+            throw out_of_range("La fila esta vacia");
         }
 
         T data = head->data;
@@ -71,10 +77,12 @@ public:
         }
 
         delete aux;
-        size--;
+        count--;
 
         return data;
     }
+
+    T dequeue() { return pop(); }
 
     // Libera los nodos al terminar de usar la fila.
     ~Queue() {

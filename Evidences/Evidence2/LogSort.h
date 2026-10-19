@@ -1,7 +1,9 @@
+//Cesar Cardenas - A00844803
 #ifndef LOGSORT_H
 #define LOGSORT_H
 
 #include <ctime>
+#include <cmath>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -9,8 +11,10 @@
 #include "LogRecord.h"
 #include "DoublyLinkedList.h"
 
+using namespace std;
+
 inline bool sortLogs(DoublyLinkedList<LogRecord>& logs,
-                     const std::string& fileName) {
+                     const string& fileName, int algorithm) {
     bool alreadyOrdered = logs.isSorted();
     long long comparisons = 0;
     int maxDepth = 0;
@@ -18,26 +22,28 @@ inline bool sortLogs(DoublyLinkedList<LogRecord>& logs,
     int prediction = 1;
 
     if (!alreadyOrdered) {
-        std::cout << "Prediccion de crecimiento: "
+        cout << "Predice el crecimiento antes de ordenar: "
                   << "1) n log n  2) n^2: ";
 
-        if (!(std::cin >> prediction) ||
+        if (!(cin >> prediction) ||
             (prediction != 1 && prediction != 2)) {
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
-            std::cout << "Prediccion invalida.\n";
+            if (cin.eof()) return false;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            cout << "Prediccion invalida.\n";
             return false;
         }
 
         clock_t start = clock();
-        logs.mergeSort(comparisons, maxDepth);
+        if (algorithm == 1) logs.mergeSort(comparisons, maxDepth);
+        else logs.quickSort(comparisons, maxDepth);
         elapsed = 1000.0 * (clock() - start) / CLOCKS_PER_SEC;
     }
 
-    std::ofstream output("output607.out");
+    ofstream output("output607.out");
 
     if (!output) {
-        std::cout << "No se pudo crear output607.out.\n";
+        cout << "No se pudo crear output607.out.\n";
         return false;
     }
 
@@ -50,8 +56,9 @@ inline bool sortLogs(DoublyLinkedList<LogRecord>& logs,
 
     output.close();
 
-    std::cout << "Algoritmo: "
-              << (alreadyOrdered ? "la lista ya estaba ordenada" : "Merge Sort")
+    cout << "Algoritmo: "
+              << (alreadyOrdered ? "la lista ya estaba ordenada" :
+                  (algorithm == 1 ? "Merge Sort" : "Quick Sort"))
               << " | Archivo: " << fileName
               << " | N: " << logs.getSize()
               << " | Tiempo (ms): " << elapsed
@@ -59,13 +66,26 @@ inline bool sortLogs(DoublyLinkedList<LogRecord>& logs,
               << " | Profundidad maxima: " << maxDepth << "\n";
 
     if (!alreadyOrdered) {
-        std::cout << "Prediccion n log n: "
-                  << (prediction == 1 ? "coincide" : "no coincide")
-                  << ".\n";
+        cout << "Prediccion: " << (prediction == 1 ? "n log n" : "n^2") << ".\n";
+        if (algorithm == 1) {
+            cout << "Crecimiento esperado: n log n.\n";
+            cout << "La prediccion " << (prediction == 1 ? "coincide" : "no coincide")
+                      << " con Merge Sort.\n";
+        } else {
+            cout << "Quick Sort usa el ultimo elemento como pivote; su caso peor es n^2.\n";
+            double nLogN = logs.getSize() * log(static_cast<double>(logs.getSize())) / log(2.0);
+            bool looksQuadratic = comparisons > 10 * nLogN;
+            cout << "Crecimiento observado aproximado: "
+                      << (looksQuadratic ? "n^2" : "n log n") << ".\n";
+            cout << "La prediccion "
+                      << ((prediction == 2) == looksQuadratic ? "coincide" : "no coincide")
+                      << " con las comparaciones de esta ejecucion.\n";
+        }
     }
 
-    std::cout << "Merge Sort conserva el orden de las fechas empatadas.\n"
-              << "Salida: output607.out\n";
+    if (!alreadyOrdered && algorithm == 1) cout << "Merge Sort conserva el orden de fechas empatadas.\n";
+    else if (!alreadyOrdered) cout << "Quick Sort puede cambiar el orden de fechas empatadas.\n";
+    cout << "Salida: output607.out\n";
 
     return true;
 }

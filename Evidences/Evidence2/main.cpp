@@ -1,4 +1,4 @@
-// Cesar Cardenas - A00844803
+//Cesar Cardenas - A00844803
 #include <iostream>
 #include <limits>
 #include <string>
@@ -9,40 +9,46 @@
 #include "LogReports.h"
 #include "DoublyLinkedList.h"
 
+using namespace std;
+
 bool askDate(int& year, int& month, int& day) {
-    std::string monthText;
+    string monthText;
+    int enteredYear, enteredMonth, enteredDay;
 
-    std::cout << "Mes (Jan-Dec): ";
-    std::cin >> monthText;
-    month = monthNumber(monthText);
+    cout << "Mes (Jan-Dec): ";
+    cin >> monthText;
+    enteredMonth = monthNumber(monthText);
 
-    std::cout << "Dia: ";
-    std::cin >> day;
+    cout << "Dia: ";
+    cin >> enteredDay;
 
-    std::cout << "Anio: ";
-    std::cin >> year;
+    cout << "Year: ";
+    cin >> enteredYear;
 
-    if (!std::cin || month == 0 || year < 1 ||
-        day < 1 || day > daysInMonth(month, year)) {
-        std::cin.clear();
-        std::cin.ignore(
-            std::numeric_limits<std::streamsize>::max(), '\n'
+    if (!cin || enteredMonth == 0 || enteredYear < 1 ||
+        enteredDay < 1 || enteredDay > daysInMonth(enteredMonth, enteredYear)) {
+        cin.clear();
+        cin.ignore(
+            numeric_limits<streamsize>::max(), '\n'
         );
-        std::cout << "Fecha invalida.\n";
+        cout << "Fecha invalida.\n";
         return false;
     }
 
+    year = enteredYear;
+    month = enteredMonth;
+    day = enteredDay;
     return true;
 }
 
 int main() {
-    std::string fileName;
+    string fileName;
 
-    std::cout << "Archivo (log607-1.txt o log607-2.txt): ";
-    std::cin >> fileName;
+    cout << "Archivo (log607-1.txt o log607-2.txt): ";
+    cin >> fileName;
 
     if (fileName != "log607-1.txt" && fileName != "log607-2.txt") {
-        std::cout << "Nombre de archivo invalido.\n";
+        cout << "Nombre de archivo invalido.\n";
         return 1;
     }
 
@@ -50,7 +56,7 @@ int main() {
     int omitted = 0;
 
     if (!loadLogs(fileName, logs, omitted)) {
-        std::cout << "No se pudo abrir el archivo.\n";
+        cout << "No se pudo abrir el archivo.\n";
         return 1;
     }
 
@@ -61,7 +67,7 @@ int main() {
     int lastDay = 0;
 
     while (true) {
-        std::cout << "\n1. Ordenar"
+        cout << "\n1. Ordenar"
                   << "\n2. Buscar por dia"
                   << "\n3. Mostrar busqueda al reves"
                   << "\n4. Estadisticas"
@@ -70,27 +76,38 @@ int main() {
 
         int option;
 
-        if (!(std::cin >> option)) {
-            std::cin.clear();
-            std::cin.ignore(
-                std::numeric_limits<std::streamsize>::max(), '\n'
+        if (!(cin >> option)) {
+            if (cin.eof()) break;
+            cin.clear();
+            cin.ignore(
+                numeric_limits<streamsize>::max(), '\n'
             );
-            std::cout << "Opcion invalida.\n";
+            cout << "Opcion invalida.\n";
             continue;
         }
 
         if (option == 1) {
             if (sorted) {
-                std::cout << "La lista ya esta ordenada.\n";
+                cout << "La lista ya esta ordenada.\n";
                 continue;
             }
 
-            if (sortLogs(logs, fileName)) {
+            cout << "Algoritmo: 1) Merge Sort  2) Quick Sort: ";
+            int algorithm;
+            if (!(cin >> algorithm) || (algorithm != 1 && algorithm != 2)) {
+                if (cin.eof()) break;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cout << "Opcion invalida.\n";
+                continue;
+            }
+
+            if (sortLogs(logs, fileName, algorithm)) {
                 sorted = true;
             }
         } else if (option == 2) {
             if (!sorted) {
-                std::cout << "Primero ordena el archivo.\n";
+                cout << "Primero ordena el archivo.\n";
                 continue;
             }
 
@@ -101,15 +118,15 @@ int main() {
             int found = searchDay(logs, lastYear, lastMonth, lastDay);
 
             if (found == 0) {
-                std::cout << "No hay registros para ese dia.\n";
+                cout << "No hay registros para ese dia.\n";
             } else {
-                std::cout << "Coincidencias: " << found << "\n";
+                cout << "Coincidencias: " << found << "\n";
             }
 
             hasSearch = true;
         } else if (option == 3) {
             if (!sorted) {
-                std::cout << "Primero ordena el archivo.\n";
+                cout << "Primero ordena el archivo.\n";
                 continue;
             }
 
@@ -117,14 +134,19 @@ int main() {
                 continue;
             }
 
-            showDayReverse(logs, lastYear, lastMonth, lastDay);
+            int found = showDayReverse(logs, lastYear, lastMonth, lastDay);
+            if (found == 0) {
+                cout << "No hay registros para ese dia.\n";
+            } else {
+                cout << "Coincidencias mostradas al reves: " << found << "\n";
+            }
             hasSearch = true;
         } else if (option == 4) {
             showStatistics(logs);
         } else if (option == 5) {
             break;
         } else {
-            std::cout << "Opcion invalida.\n";
+            cout << "Opcion invalida.\n";
         }
     }
 

@@ -1,16 +1,19 @@
+//Cesar Cardenas - A00844803
 #ifndef LOGRECORD_H
 #define LOGRECORD_H
 
 #include <string>
 #include <sstream>
 
+using namespace std;
+
 struct LogRecord {
     int month, day, year;
     int hour, minute, second;
     int lineNumber;
-    std::string ip;
-    std::string eventType;
-    std::string original;
+    string ip;
+    string eventType;
+    string original;
 
     bool operator>(const LogRecord& other) const;
 };
@@ -30,8 +33,8 @@ inline bool LogRecord::operator>(const LogRecord& other) const {
     return compareDate(*this, other) > 0;
 }
 
-inline int monthNumber(const std::string& month) {
-    const std::string names[] = {
+inline int monthNumber(const string& month) {
+    const string names[] = {
         "Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
     };
@@ -59,10 +62,10 @@ inline int daysInMonth(int month, int year) {
     return days[month - 1];
 }
 
-inline bool parseLine(const std::string& line, int lineNumber,
-                      LogRecord& record, std::string& reason) {
-    std::istringstream input(line);
-    std::string month, timeText;
+inline bool parseLine(const string& line, int lineNumber,
+                      LogRecord& record, string& reason) {
+    istringstream input(line);
+    string month, timeText;
 
     if (!(input >> month >> record.day >> record.year
                 >> timeText >> record.ip)) {
@@ -84,7 +87,7 @@ inline bool parseLine(const std::string& line, int lineNumber,
     }
 
     char colon1, colon2;
-    std::istringstream timeInput(timeText);
+    istringstream timeInput(timeText);
 
     if (!(timeInput >> record.hour >> colon1
                     >> record.minute >> colon2 >> record.second) ||
@@ -100,7 +103,7 @@ inline bool parseLine(const std::string& line, int lineNumber,
         return false;
     }
 
-    std::getline(input, record.eventType);
+    getline(input, record.eventType);
 
     if (!record.eventType.empty() && record.eventType[0] == ' ') {
         record.eventType.erase(0, 1);

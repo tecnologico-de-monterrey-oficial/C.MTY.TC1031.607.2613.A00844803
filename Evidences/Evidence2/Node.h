@@ -1,6 +1,8 @@
-// Cesar Cardenas - A00844803
+//Cesar Cardenas - A00844803
 #ifndef NODE_H
 #define NODE_H
+
+using namespace std;
 
 template <typename T>
 struct Node {

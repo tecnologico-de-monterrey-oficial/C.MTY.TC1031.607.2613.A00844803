@@ -1,4 +1,4 @@
-// Cesar Cardenas - A00844803
+//Cesar Cardenas - A00844803
 #ifndef DOUBLY_LINKED_LIST_H
 #define DOUBLY_LINKED_LIST_H
 
@@ -6,17 +6,19 @@
 #include <stdexcept>
 #include "NodeD.h"
 
+using namespace std;
+
 template <typename T>
 class DoublyLinkedList {
 private:
     NodeD<T>* head;
     NodeD<T>* tail;
-    int size;
+    int count;
 
     // Busca el nodo de una posicion.
     NodeD<T>* getNode(int index) {
-        if (index < 0 || index >= size) {
-            throw std::out_of_range("Indice invalido");
+        if (index < 0 || index >= count) {
+            throw out_of_range("Indice invalido");
         }
 
         NodeD<T>* aux = head;
@@ -109,19 +111,28 @@ public:
     DoublyLinkedList() {
         head = nullptr;
         tail = nullptr;
-        size = 0;
+        count = 0;
     }
 
     int getSize() const {
-        return size;
+        return count;
     }
+
+    int size() const { return count; }
+    bool isEmpty() const { return count == 0; }
+
+    NodeD<T>* getHead() { return head; }
 
     const NodeD<T>* getHead() const {
         return head;
     }
 
+    NodeD<T>* getTail() { return tail; }
+
+    const NodeD<T>* getTail() const { return tail; }
+
     void mergeSort(long long& comparisons, int& maxDepth) {
-        if (size < 2) {
+        if (count < 2) {
             return;
         }
 
@@ -134,6 +145,39 @@ public:
         }
 
         tail = current;
+    }
+
+    NodeD<T>* partition(NodeD<T>* first, NodeD<T>* last,
+                        long long& comparisons) {
+        T pivot = last->data;
+        NodeD<T>* boundary = first->prev;
+        for (NodeD<T>* current = first; current != last; current = current->next) {
+            comparisons++;
+            if (!(current->data > pivot)) {
+                boundary = boundary == nullptr ? first : boundary->next;
+                T temp = boundary->data;
+                boundary->data = current->data;
+                current->data = temp;
+            }
+        }
+        boundary = boundary == nullptr ? first : boundary->next;
+        T temp = boundary->data;
+        boundary->data = last->data;
+        last->data = temp;
+        return boundary;
+    }
+
+    void quickSortParts(NodeD<T>* first, NodeD<T>* last,
+                        long long& comparisons, int depth, int& maxDepth) {
+        if (first == nullptr || last == nullptr || first == last || first == last->next) return;
+        if (depth > maxDepth) maxDepth = depth;
+        NodeD<T>* pivot = partition(first, last, comparisons);
+        if (pivot->prev != nullptr) quickSortParts(first, pivot->prev, comparisons, depth + 1, maxDepth);
+        if (pivot->next != nullptr) quickSortParts(pivot->next, last, comparisons, depth + 1, maxDepth);
+    }
+
+    void quickSort(long long& comparisons, int& maxDepth) {
+        if (count > 1) quickSortParts(head, tail, comparisons, 1, maxDepth);
     }
 
     bool isSorted() const {
@@ -161,7 +205,7 @@ public:
         }
 
         head = node;
-        size++;
+        count++;
     }
 
     void addLast(T data) {
@@ -175,7 +219,7 @@ public:
         }
 
         tail = node;
-        size++;
+        count++;
     }
 
     // Inserta a la derecha del indice.
@@ -192,8 +236,22 @@ public:
             aux->next->prev = node;
             aux->next = node;
 
-            size++;
+            count++;
         }
+    }
+
+    // Inserta el dato despues de un nodo de esta lista.
+    void insertAfter(NodeD<T>* target, T data) {
+        NodeD<T>* current = head;
+        int index = 0;
+        while (current != nullptr && current != target) {
+            current = current->next;
+            index++;
+        }
+        if (current == nullptr) {
+            throw out_of_range("El nodo no pertenece a la lista");
+        }
+        insert(index, data);
     }
 
     void clear() {
@@ -204,28 +262,55 @@ public:
         }
 
         tail = nullptr;
-        size = 0;
+        count = 0;
     }
 
     void print() {
         NodeD<T>* aux = head;
-        std::cout << "[";
+        cout << "[";
 
         while (aux != nullptr) {
-            std::cout << aux->data;
+            cout << aux->data;
 
             if (aux->next != nullptr) {
-                std::cout << ", ";
+                cout << ", ";
             }
 
             aux = aux->next;
         }
 
-        std::cout << "]" << std::endl;
+        cout << "]" << endl;
+    }
+
+    void printReverse() {
+        NodeD<T>* current = tail;
+        cout << "[";
+        while (current != nullptr) {
+            cout << current->data;
+            if (current->prev != nullptr) cout << ", ";
+            current = current->prev;
+        }
+        cout << "]" << endl;
+    }
+
+    bool deleteNode(NodeD<T>* target) {
+        NodeD<T>* current = head;
+        while (current != nullptr && current != target) current = current->next;
+        if (current == nullptr) return false;
+
+        if (current->prev == nullptr) head = current->next;
+        else current->prev->next = current->next;
+
+        if (current->next == nullptr) tail = current->prev;
+        else current->next->prev = current->prev;
+
+        delete current;
+        count--;
+        return true;
     }
 
         bool deleteAt(int index) {
-        if (index < 0 || index >= size) {
+        if (index < 0 || index >= count) {
             return false;
         }
 
@@ -244,7 +329,7 @@ public:
         }
 
         delete aux;
-        size--;
+        count--;
 
         return true;
     }
@@ -281,7 +366,7 @@ public:
         int index = findData(oldData);
 
         if (index == -1) {
-            throw std::out_of_range("El dato no existe");
+            throw out_of_range("El dato no existe");
         }
 
         updateAt(index, newData);
@@ -309,17 +394,17 @@ public:
     DoublyLinkedList(const DoublyLinkedList<T>& other) {
         head = nullptr;
         tail = nullptr;
-        size = 0;
+        count = 0;
 
         *this = other;
     }
 
         // Ordenamiento burbuja.
     void sort() {
-        for (int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < count - 1; i++) {
             NodeD<T>* aux = head;
 
-            for (int j = 0; j < size - 1 - i; j++) {
+            for (int j = 0; j < count - 1 - i; j++) {
                 if (aux->data > aux->next->data) {
                     T temp = aux->data;
                     aux->data = aux->next->data;
@@ -348,7 +433,7 @@ public:
             }
 
             aux->next = copy;
-            size++;
+            count++;
 
             // Avanza al siguiente nodo original.
             aux = copy->next;

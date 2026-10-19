@@ -1,5 +1,7 @@
-// Cesar Cardenas - A00844803
+//Cesar Cardenas - A00844803
 #pragma once
+
+using namespace std;
 
 template <typename T>
 struct NodeD {

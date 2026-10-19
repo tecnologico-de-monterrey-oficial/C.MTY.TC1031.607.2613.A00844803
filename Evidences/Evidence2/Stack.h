@@ -1,4 +1,4 @@
-// Cesar Cardenas - A00844803
+//Cesar Cardenas - A00844803
 #ifndef STACK_H
 #define STACK_H
 #include <stdexcept>
@@ -20,12 +20,12 @@ template <typename T>
 class Stack {
 private:
     StackNode<T>* head;
-    int size;
+    int count;
 
 public:
     Stack() {
         head = nullptr;
-        size = 0;
+        count = 0;
     }
 
         void push(T data) {
@@ -33,7 +33,7 @@ public:
 
         node->next = head;
         head = node;
-        size++;
+        count++;
     }
 
     T pop() {
@@ -46,7 +46,7 @@ public:
 
         head = head->next;
         delete aux;
-        size--;
+        count--;
 
         return data;
     }
@@ -59,8 +59,14 @@ public:
         return head->data;
     }
 
+    T peek() { return top(); }
+
+    bool isEmpty() const { return head == nullptr; }
+
+    int size() const { return count; }
+
     int getSize() {
-        return size;
+        return count;
     }
 
     ~Stack() {

@@ -1,4 +1,4 @@
-// Cesar Cardenas - A00844803
+//Cesar Cardenas - A00844803
 #ifndef LINKEDLIST_H
 #define LINKEDLIST_H
 
@@ -7,24 +7,27 @@
 #include <utility>
 #include "Node.h"
 
+using namespace std;
+
 // Lista simplemente ligada. Indices desde 0; cada lista es duena de sus nodos.
 template <typename T>
 class LinkedList {
 private:
     Node<T>* head = nullptr;
-    int size = 0;
+    Node<T>* tail = nullptr;
+    int count = 0;
 
     Node<T>* nodeAt(int index) {
-        if (index < 0 || index >= size)
-            throw std::out_of_range("La posicion no existe en la lista");
+        if (index < 0 || index >= count)
+            throw out_of_range("La posicion no existe en la lista");
         Node<T>* node = head;
         for (int i = 0; i < index; ++i) node = node->next;
         return node;
     }
 
     const Node<T>* nodeAt(int index) const {
-        if (index < 0 || index >= size)
-            throw std::out_of_range("La posicion no existe en la lista");
+        if (index < 0 || index >= count)
+            throw out_of_range("La posicion no existe en la lista");
         const Node<T>* node = head;
         for (int i = 0; i < index; ++i) node = node->next;
         return node;
@@ -37,11 +40,8 @@ public:
     // Copia profunda: una lista temporal evita fugas si copiar T falla.
     LinkedList(const LinkedList& other) {
         LinkedList copy;
-        Node<T>** link = &copy.head;
         for (const Node<T>* node = other.head; node; node = node->next) {
-            *link = new Node<T>(node->data);
-            link = &((*link)->next);
-            ++copy.size;
+            copy.addLast(node->data);
         }
         swap(copy);
     }
@@ -65,8 +65,9 @@ public:
     }
 
     void swap(LinkedList& other) noexcept {
-        std::swap(head, other.head);
-        std::swap(size, other.size);
+        swap(head, other.head);
+        swap(tail, other.tail);
+        swap(count, other.count);
     }
 
     void clear() noexcept {
@@ -75,54 +76,70 @@ public:
             head = head->next;
             delete old;
         }
-        size = 0;
+        tail = nullptr;
+        count = 0;
     }
 
-    int getSize() const noexcept { return size; }
-    bool empty() const noexcept { return size == 0; }
+    int getSize() const noexcept { return count; }
+    int size() const noexcept { return count; }
+    bool empty() const noexcept { return count == 0; }
+    bool isEmpty() const noexcept { return empty(); }
+    Node<T>* getHead() const noexcept { return head; }
+    Node<T>* getTail() const noexcept { return tail; }
 
     // O(1)
     void addFirst(const T& data) {
         head = new Node<T>(data, head);
-        ++size;
+        if (!tail) tail = head;
+        ++count;
     }
 
-    // O(n)
+    // O(1)
     void addLast(const T& data) {
-        Node<T>** link = &head;
-        while (*link) link = &((*link)->next);
-        *link = new Node<T>(data);
-        ++size;
+        Node<T>* node = new Node<T>(data);
+        if (!head) head = node;
+        else tail->next = node;
+        tail = node;
+        ++count;
+    }
+
+    bool removeFirst() {
+        if (!head) return false;
+        Node<T>* old = head;
+        head = head->next;
+        delete old;
+        --count;
+        if (!head) tail = nullptr;
+        return true;
     }
 
     // Inserta DESPUES de un indice existente (enunciado del menu). O(n).
     void insert(int index, const T& data) {
         Node<T>* previous = nodeAt(index);
         previous->next = new Node<T>(data, previous->next);
-        ++size;
+        if (tail == previous) tail = previous->next;
+        ++count;
     }
 
     // Borra solo la primera coincidencia. O(n).
     bool deleteData(const T& data) {
         Node<T>** link = &head;
-        while (*link && !((*link)->data == data)) link = &((*link)->next);
-        if (!*link) return false;
-        Node<T>* old = *link;
-        *link = old->next;
-        delete old;
-        --size;
-        return true;
+        return deleteAt(findData(data));
     }
 
     // Indice invalido: false; conserva la lista. O(n).
     bool deleteAt(int index) {
-        if (index < 0 || index >= size) return false;
+        if (index < 0 || index >= count) return false;
         Node<T>** link = &head;
         for (int i = 0; i < index; ++i) link = &((*link)->next);
         Node<T>* old = *link;
         *link = old->next;
+        if (old == tail) {
+            tail = head;
+            while (tail && tail->next) tail = tail->next;
+        }
         delete old;
-        --size;
+        --count;
         return true;
     }
 
@@ -132,7 +149,7 @@ public:
     void updateData(const T& oldData, const T& newData) {
         Node<T>* node = head;
         while (node && !(node->data == oldData)) node = node->next;
-        if (!node) throw std::out_of_range("No se encontro el dato a actualizar");
+        if (!node) throw out_of_range("No se encontro el dato a actualizar");
         node->data = newData;
     }
 
@@ -152,7 +169,7 @@ public:
     void push_front(const T& data) { addFirst(data); }
     void push_back(const T& data) { addLast(data); }
 
-    void print(std::ostream& out = std::cout) const {
+    void print(ostream& out = cout) const {
         out << '[';
         for (const Node<T>* node = head; node; node = node->next) {
             out << node->data;
