@@ -26,15 +26,15 @@ Las pruebas revisan casos vacíos, con un elemento y operaciones en los extremos
 
 ## Uso de inteligencia artificial
 
-Se utilizó ChatGPT como apoyo para revisar los requisitos de la actividad y comprender las estructuras de datos y funciones utilizadas. También se consultó sobre la búsqueda inversa con pila, las diferencias entre Merge Sort y Quick Sort, errores de compilación y pruebas con los archivos `log607`.
+Utilicé ChatGPT únicamente como apoyo para aclarar dudas y explicarme conceptos relacionados con la actividad. La implementación de las estructuras, la carga y validación de los logs, los ordenamientos, la búsqueda por día, las estadísticas, el menú y las pruebas las realicé yo, y yo ejecuté el programa para obtener las mediciones del reporte.
 
-Prompts de referencia:
+Las consultas trataron sobre cómo aprovechar que la lista está ordenada para buscar los registros de un día, cómo funciona una pila para mostrar resultados en orden inverso, las diferencias entre Merge Sort y Quick Sort, el significado del número de comparaciones y de la profundidad máxima, y errores de compilación y casos límite al cargar los archivos log607.
+
+3 prompts usados:
 
 - “Explícame cómo buscar todos los registros de un día en una lista ordenada.”
-- “Explícame cómo usar una pila para mostrar los resultados de una búsqueda en orden inverso.”
 - “¿Cuál es la diferencia entre Merge Sort y Quick Sort al ordenar mis registros?”
 - “¿Qué errores o casos límite debo revisar al cargar los archivos `log607`?”
-- “Explícame qué significan el número de comparaciones y la profundidad máxima del ordenamiento.”
 
 ## Video
 link
