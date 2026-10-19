@@ -37,5 +37,4 @@ Prompts de referencia:
 - “Explícame qué significan el número de comparaciones y la profundidad máxima del ordenamiento.”
 
 ## Video
-
-Agrega aquí el enlace al video de 3 a 5 minutos cuando esté grabado y subido.
+link
