@@ -26,8 +26,6 @@ Las pruebas revisan casos vacíos, con un elemento y operaciones en los extremos
 
 ## Uso de inteligencia artificial
 
-## Uso de inteligencia artificial
-
 Utilicé ChatGPT como apoyo para aclarar dudas, explicarme conceptos y revisar mi programa contra los requisitos de la actividad. La implementación base de las estructuras, la carga y validación de los logs, los ordenamientos, la búsqueda por día, las estadísticas y el menú la realicé yo, y yo ejecuté el programa para obtener las mediciones del reporte.
 
 También le pedí que revisara mi programa y me señalara errores o casos incompletos. A partir de sus recomendaciones mejoré la estructura del código para que quedara más limpia y corregí errores que yo no había logrado detectar. Las sugerencias que decidí aplicar las integré y probé yo.
