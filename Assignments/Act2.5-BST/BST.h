@@ -389,6 +389,49 @@ void BST<T>::visit(string method) {
 }
 
 template <typename T>
+void BST<T>::levelOrder(NodeT<T>* node) {
+    if (node == nullptr) {
+        return;
+    }
+
+    queue<NodeT<T>*> nodes;
+    nodes.push(node);
+
+    while (!nodes.empty()) {
+        NodeT<T>* current = nodes.front();
+        nodes.pop();
+
+        cout << current->data << " ";
+
+        if (current->left != nullptr) {
+            nodes.push(current->left);
+        }
+
+        if (current->right != nullptr) {
+            nodes.push(current->right);
+        }
+    }
+}
+
+template <typename T>
+void BST<T>::visit(int method) {
+    if (method == 1) {
+        preOrder(root);
+    } else if (method == 2) {
+        inOrder(root);
+    } else if (method == 3) {
+        postOrder(root);
+    } else if (method == 4) {
+        levelOrder(root);
+    } else {
+        cout << "Opcion de recorrido invalida." << endl;
+        return;
+    }
+
+    cout << endl;
+}
+
+template <typename T>
 void BST<T>::print() {
     if (root == nullptr) { 
         cout << "(arbol vacio)" << endl; 
