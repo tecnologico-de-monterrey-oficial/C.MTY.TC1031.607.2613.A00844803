@@ -106,6 +106,77 @@ bool BST<T>::find(T data) {
 }
 
 template <typename T>
+int BST<T>::height(NodeT<T>* node) {
+    if (node == nullptr) {
+        return -1;
+    }
+
+    int leftHeight = height(node->left);
+    int rightHeight = height(node->right);
+
+    return (leftHeight > rightHeight ? leftHeight : rightHeight) + 1;
+}
+
+template <typename T>
+int BST<T>::height() {
+    return height(root);
+}
+
+template <typename T>
+void BST<T>::ancestors(T data) {
+    NodeT<T>* aux = root;
+    vector<T> ancestorsList;
+
+    while (aux != nullptr && aux->data != data) {
+        ancestorsList.push_back(aux->data);
+
+        if (data < aux->data) {
+            aux = aux->left;
+        } else {
+            aux = aux->right;
+        }
+    }
+
+    if (aux == nullptr) {
+        cout << "El dato no se encuentra en el arbol." << endl;
+        return;
+    }
+
+    if (ancestorsList.empty()) {
+        cout << "El nodo raiz no tiene ancestros." << endl;
+        return;
+    }
+
+    cout << "Ancestros de " << data << ": ";
+    for (int i = 0; i < ancestorsList.size(); i++) {
+        cout << ancestorsList[i] << " ";
+    }
+    cout << endl;
+}
+
+template <typename T>
+int BST<T>::whatLevelAmI(T data) {
+    NodeT<T>* aux = root;
+    int level = 0;
+
+    while (aux != nullptr) {
+        if (aux->data == data) {
+            return level;
+        }
+
+        if (data < aux->data) {
+            aux = aux->left;
+        } else {
+            aux = aux->right;
+        }
+
+        level++;
+    }
+
+    return -1;
+}
+
+template <typename T>
 void BST<T>::remove(T data) {
     // validamos si el árbol esta vacío
     if (root != nullptr) {
