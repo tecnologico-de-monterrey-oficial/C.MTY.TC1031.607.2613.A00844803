@@ -1,6 +1,11 @@
 #if !defined(BST_H)
 #define BST_H
 
+#include <iostream>
+#include <queue>
+#include <stdexcept>
+#include <string>
+#include <vector>
 #include "NodeT.h"
 
 template <typename T>
@@ -11,6 +16,8 @@ private:
     void preOrder(NodeT<T>* node);
     void inOrder(NodeT<T>* node);
     void postOrder(NodeT<T>* node);
+    void levelOrder(NodeT<T>* node);
+    int height(NodeT<T>* node);
 public:
     BST() : root(nullptr) {}
     void insert(T data);
@@ -18,6 +25,10 @@ public:
     void print();
     void visit(string method);
     void remove(T data);
+    int height();
+    void ancestors(T data);
+    int whatLevelAmI(T data);
+    void visit(int method);
 };
 
 template <typename T>
